@@ -61,7 +61,6 @@ case class Board(position: List[Piece], info: List[Boolean]) {
       .filter{ case (piece, index) => piece.color == color }
       .flatMap{ case (piece, index) => moves.getMovesAt(index).map(move => changedBoard(index, move))} ++
       moves.castleMoves(color)
-
   }
 
 }

@@ -6,8 +6,6 @@ import scala.collection.GenTraversableOnce
 
 case class Moves(board: Board) {
 
-
-
   def row(i: Int) = i / 8
   def col(i: Int) = i % 8
 
@@ -61,17 +59,17 @@ case class Moves(board: Board) {
     if (board.position(pos).color == 'W') {
       if (pos >= 8){
         if (pos >= 8 && board.emptySquare(pos - 8)) delta += -8
-        if (row(pos) == 6 && board.emptySquare(pos - 16)) delta += -16
-        if (pos >= 8 && !board.emptySquare(pos - 9) && col(pos) != 0) delta += -9
-        if (pos >= 8 && !board.emptySquare(pos - 7) && col(pos) != 7) delta += -7
+        if (row(pos) == 6 && board.emptySquare(pos - 16) && board.emptySquare(pos - 8)) delta += -16
+        if (pos >= 8 && !board.emptySquare(pos - 9) && col(pos) != 0 && board.position(pos-9).color == 'B') delta += -9
+        if (pos >= 8 && !board.emptySquare(pos - 7) && col(pos) != 7 && board.position(pos-7).color == 'B') delta += -7
       }
     }
     else {
       if (pos < 56){
         if (board.emptySquare(pos + 8)) delta += 8
-        if (row(pos) == 1 && board.emptySquare(pos + 16)) delta += 16
-        if (!board.emptySquare(pos + 9) && col(pos) != 7) delta += 9
-        if (!board.emptySquare(pos + 7) && col(pos) != 0) delta += 7
+        if (row(pos) == 1 && board.emptySquare(pos + 16) && board.emptySquare(pos + 8)) delta += 16
+        if (!board.emptySquare(pos + 9) && col(pos) != 7 && board.position(pos + 9).color == 'W') delta += 9
+        if (!board.emptySquare(pos + 7) && col(pos) != 0 && board.position(pos + 7).color == 'W') delta += 7
       }
     }
     delta.map(delta => pos + delta).toList
@@ -123,7 +121,6 @@ case class Moves(board: Board) {
     if (color == 'W') castleWestWhite ++ castleEastWhite
     else castleWestBlack ++ castleEastBlack
   }
-
 
   def getMovesAt(pos: Int) = {
     movesFromType(pos).filter(newPos => !check(board.position(pos).color, board.changedBoard(pos, newPos)))

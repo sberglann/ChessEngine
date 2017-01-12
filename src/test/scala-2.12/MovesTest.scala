@@ -282,6 +282,4 @@ class MovesTest extends FunSuite with BeforeAndAfterEach {
     val illegalMoveHistory = Moves(board2)
     assert(illegalMoveHistory.castleWestBlack === List())
   }
-
-
 }
