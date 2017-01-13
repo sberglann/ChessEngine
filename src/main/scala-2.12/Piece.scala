@@ -6,13 +6,19 @@ case class Piece (prop: String) {
   //Color represented as 'W', 'B' or 'E' (empty), piece types represented as 'K', 'Q', 'R', 'B', 'N', 'P' or 'E' (empty)
   lazy val color = prop.charAt(0)
   lazy val pieceType = prop.charAt(1)
-  lazy val value = color match {
-    case 'K' => 100.0
-    case 'Q' => 9.75
-    case 'R' => 5.0
-    case 'B' => 3.25
-    case 'N' => 3.25
-    case 'P' => 1.0
+  lazy val value = prop match {
+    case "WK" => 100.0
+    case "WQ" => 9.75
+    case "WR" => 5.0
+    case "WB" => 3.25
+    case "WN" => 3.25
+    case "WP" => 1.0
+    case "BK" => -100.0
+    case "BQ" => -9.75
+    case "BR" => -5.0
+    case "BB" => -3.25
+    case "BN" => -3.25
+    case "BP" => -1.0
     case _   => 0.0
   }
 

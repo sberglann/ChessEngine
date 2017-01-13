@@ -2,7 +2,7 @@
 /**
   * Created by Sigurd on 03.01.2017.
   */
-case class Board(position: List[Piece], info: List[Boolean]) {
+case class Board(position: List[Piece], info: List[Boolean], enPassantCol: Int) {
   /**
     * info is a list of booleans representing board information.
     * 0: white is checked
@@ -11,6 +11,9 @@ case class Board(position: List[Piece], info: List[Boolean]) {
     * 3: no earlier move prohibits BLACK from castling west
     * 4: no earlier move prohibits WHITE from castling east
     * 5: no earlier move prohibits BLACK from castling east
+    *
+    * enPassantCol: Contains the column number of where a pawn can capture with en passant. If last move was not a
+    * double-step pawn move, it is simply set to -1.
     */
 
   lazy val whiteKingPos = position.indexWhere(piece => piece.pieceType == 'K' && piece.color == 'W')
@@ -39,6 +42,9 @@ case class Board(position: List[Piece], info: List[Boolean]) {
 
   def changedBoard(pos: Int, newPos: Int): Board = {
     //TODO: Add checks to info list, or change list.
+
+    val newEnPassantCol = if (position(pos).pieceType == 'P' && math.abs(row(pos) - row(newPos)) == 2) col(pos) else -1
+
     //Checks if castle or king is moved. If this is the case, castling cannot be done, and the info-list is changed
     val newInfo =
       if (pos == whiteKingPos)      info.updated(2, false).updated(4, false)
@@ -51,7 +57,7 @@ case class Board(position: List[Piece], info: List[Boolean]) {
 
     this.copy(position = position
       .updated(pos, Piece("EE"))
-      .updated(newPos, this.position(pos)), info = newInfo)
+      .updated(newPos, this.position(pos)), info = newInfo, enPassantCol = newEnPassantCol)
   }
 
   def generateSuccessor(color: Char) = {

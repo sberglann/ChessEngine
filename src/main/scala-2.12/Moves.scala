@@ -51,13 +51,11 @@ case class Moves(board: Board) {
   }
 
 
-
   def pawnMoves(pos: Int): List[Int] = {
-    //TODO: En passant
-
     var delta = scala.collection.mutable.Buffer[Int]()
     if (board.position(pos).color == 'W') {
-      if (pos >= 8){
+      if (row(pos) == 3 && math.abs(board.enPassantCol - col(pos)) == 1) delta += board.enPassantCol - col(pos) - 8
+      if (row(pos) > 0){
         if (pos >= 8 && board.emptySquare(pos - 8)) delta += -8
         if (row(pos) == 6 && board.emptySquare(pos - 16) && board.emptySquare(pos - 8)) delta += -16
         if (pos >= 8 && !board.emptySquare(pos - 9) && col(pos) != 0 && board.position(pos-9).color == 'B') delta += -9
@@ -65,7 +63,8 @@ case class Moves(board: Board) {
       }
     }
     else {
-      if (pos < 56){
+      if (row(pos) == 4 && math.abs(board.enPassantCol - col(pos)) == 1) delta += 8 - col(pos) + board.enPassantCol
+      if (row(pos) < 7){
         if (board.emptySquare(pos + 8)) delta += 8
         if (row(pos) == 1 && board.emptySquare(pos + 16) && board.emptySquare(pos + 8)) delta += 16
         if (!board.emptySquare(pos + 9) && col(pos) != 7 && board.position(pos + 9).color == 'W') delta += 9

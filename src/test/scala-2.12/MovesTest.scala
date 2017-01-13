@@ -16,7 +16,7 @@ class MovesTest extends FunSuite with BeforeAndAfterEach {
       Piece("EE"), Piece("EE"), Piece("EE"), Piece("EE"), Piece("EE"), Piece("EE"), Piece("EE"), Piece("EE"),
       Piece("WP"), Piece("WP"), Piece("WP"), Piece("WP"), Piece("WP"), Piece("WP"), Piece("WP"), Piece("WP"),
       Piece("WR"), Piece("WN"), Piece("WB"), Piece("WQ"), Piece("WK"), Piece("WB"), Piece("WN"), Piece("WR")),
-      List(false, false, true, true, true, true))
+      List(false, false, true, true, true, true), -1)
     val moves = Moves(board)
 
     assert(moves.getMovesAt(0).toSet === Set())
@@ -66,7 +66,7 @@ class MovesTest extends FunSuite with BeforeAndAfterEach {
       Piece("EE"), Piece("EE"), Piece("EE"), Piece("EE"), Piece("EE"), Piece("EE"), Piece("EE"), Piece("EE"),
       Piece("EE"), Piece("EE"), Piece("EE"), Piece("EE"), Piece("EE"), Piece("EE"), Piece("EE"), Piece("EE"),
       Piece("WR"), Piece("WN"), Piece("WB"), Piece("WQ"), Piece("WK"), Piece("WB"), Piece("WN"), Piece("WR")),
-      List(false, false, true, true, true, true))
+      List(false, false, true, true, true, true), -1)
     val moves = Moves(board)
     assert(moves.getMovesAt(0).toSet === Set(8, 16, 24, 32, 40, 48, 56))
     assert(moves.getMovesAt(1).toSet === Set(11, 16, 18))
@@ -97,11 +97,30 @@ class MovesTest extends FunSuite with BeforeAndAfterEach {
       Piece("EE"), Piece("EE"), Piece("BP"), Piece("EE"), Piece("BR"), Piece("EE"), Piece("EE"), Piece("BB"),
       Piece("EE"), Piece("WQ"), Piece("EE"), Piece("WP"), Piece("BP"), Piece("EE"), Piece("WP"), Piece("EE"),
       Piece("EE"), Piece("EE"), Piece("EE"), Piece("EE"), Piece("EE"), Piece("EE"), Piece("WK"), Piece("EE")
-    ), List(false, false, false, false))
+    ), List(false, false, false, false), -1)
     val moves = Moves(board)
     assert(moves.getMovesAt(51).toSet === Set(43, 35, 42, 44))
     assert(moves.getMovesAt(42).toSet === Set(49, 50, 51))
     assert(moves.getMovesAt(54).toSet === Set(46, 38))
+  }
+
+  test("En passant test") {
+    val board = Board(List(
+      Piece("BR"), Piece("BN"), Piece("BB"), Piece("BQ"), Piece("BK"), Piece("BB"), Piece("BN"), Piece("BR"),
+      Piece("BP"), Piece("EE"), Piece("BP"), Piece("EE"), Piece("BP"), Piece("BP"), Piece("BP"), Piece("EE"),
+      Piece("EE"), Piece("EE"), Piece("EE"), Piece("EE"), Piece("EE"), Piece("EE"), Piece("EE"), Piece("EE"),
+      Piece("EE"), Piece("EE"), Piece("EE"), Piece("BP"), Piece("WP"), Piece("EE"), Piece("WP"), Piece("BP"),
+      Piece("WP"), Piece("BP"), Piece("EE"), Piece("EE"), Piece("EE"), Piece("EE"), Piece("EE"), Piece("EE"),
+      Piece("EE"), Piece("EE"), Piece("EE"), Piece("EE"), Piece("EE"), Piece("EE"), Piece("EE"), Piece("EE"),
+      Piece("EE"), Piece("WP"), Piece("WP"), Piece("WP"), Piece("WP"), Piece("WP"), Piece("EE"), Piece("WP"),
+      Piece("WR"), Piece("WN"), Piece("WB"), Piece("WQ"), Piece("WK"), Piece("WB"), Piece("WN"), Piece("WR")),
+      List(false, false, true, true, true, true), 3)
+    val moves = Moves(board)
+    assert(moves.getMovesAt(28).toSet === Set(19, 20))
+    assert(moves.getMovesAt(30).toSet === Set(22))
+
+    val newCol = moves.copy(board = board.copy(enPassantCol = 0))
+    assert(newCol.getMovesAt(33).toSet === Set(41, 40))
   }
 
   test("Bishop moves test") {
@@ -114,7 +133,7 @@ class MovesTest extends FunSuite with BeforeAndAfterEach {
       Piece("EE"), Piece("EE"), Piece("BP"), Piece("EE"), Piece("BR"), Piece("EE"), Piece("EE"), Piece("BB"),
       Piece("EE"), Piece("WQ"), Piece("EE"), Piece("WP"), Piece("BP"), Piece("WP"), Piece("WP"), Piece("EE"),
       Piece("EE"), Piece("EE"), Piece("EE"), Piece("EE"), Piece("WB"), Piece("EE"), Piece("WK"), Piece("EE")
-    ), List(false, false, false, false))
+    ), List(false, false, false, false), -1)
     val moves = Moves(board)
     assert(moves.getMovesAt(47).toSet === Set(54, 38, 29, 20, 11, 2))
     assert(moves.getMovesAt(27).toSet === Set(18, 9, 0, 20, 13, 6, 34, 41, 48, 36, 45))
@@ -132,7 +151,7 @@ class MovesTest extends FunSuite with BeforeAndAfterEach {
       Piece("EE"), Piece("EE"), Piece("BP"), Piece("WR"), Piece("BR"), Piece("EE"), Piece("EE"), Piece("BB"),
       Piece("EE"), Piece("WQ"), Piece("EE"), Piece("WP"), Piece("BP"), Piece("EE"), Piece("WP"), Piece("EE"),
       Piece("EE"), Piece("EE"), Piece("EE"), Piece("EE"), Piece("EE"), Piece("EE"), Piece("WK"), Piece("EE")
-    ), List(false, false, false, false))
+    ), List(false, false, false, false), -1)
     val moves = Moves(board)
     assert(moves.getMovesAt(27).toSet === Set(19, 11, 35, 43))
     assert(moves.getMovesAt(43).toSet === Set(35, 27, 42, 44))
@@ -149,7 +168,7 @@ class MovesTest extends FunSuite with BeforeAndAfterEach {
       Piece("EE"), Piece("EE"), Piece("BP"), Piece("EE"), Piece("BR"), Piece("EE"), Piece("EE"), Piece("BN"),
       Piece("EE"), Piece("WQ"), Piece("EE"), Piece("WP"), Piece("BP"), Piece("EE"), Piece("WP"), Piece("EE"),
       Piece("EE"), Piece("EE"), Piece("EE"), Piece("EE"), Piece("EE"), Piece("EE"), Piece("EE"), Piece("EE")
-    ), List(false, false, false, false))
+    ), List(false, false, false, false), -1)
     val moves = Moves(board)
     assert(moves.getMovesAt(18).toSet === Set())
     assert(moves.getMovesAt(33).toSet === Set(48, 50, 43, 27, 16))
@@ -165,7 +184,7 @@ class MovesTest extends FunSuite with BeforeAndAfterEach {
       Piece("EE"), Piece("EE"), Piece("EE"), Piece("EE"), Piece("EE"), Piece("EE"), Piece("EE"), Piece("EE"),
       Piece("WP"), Piece("WP"), Piece("WP"), Piece("WP"), Piece("WP"), Piece("WP"), Piece("WP"), Piece("WP"),
       Piece("WR"), Piece("WN"), Piece("EE"), Piece("EE"), Piece("WK"), Piece("WB"), Piece("WN"), Piece("WR")),
-      List(false, false, true, true, true, true))
+      List(false, false, true, true, true, true), -1)
 
     val blockingPiece = Moves(board)
     assert(blockingPiece.castleWestWhite === List())
@@ -197,7 +216,7 @@ class MovesTest extends FunSuite with BeforeAndAfterEach {
       Piece("EE"), Piece("EE"), Piece("EE"), Piece("EE"), Piece("EE"), Piece("EE"), Piece("EE"), Piece("EE"),
       Piece("WP"), Piece("WP"), Piece("WP"), Piece("WP"), Piece("WP"), Piece("WP"), Piece("WP"), Piece("WP"),
       Piece("WR"), Piece("WN"), Piece("WB"), Piece("WQ"), Piece("WK"), Piece("WB"), Piece("WN"), Piece("WR")),
-      List(false, false, true, true, true, true))
+      List(false, false, true, true, true, true), -1)
 
     val blockingPiece = Moves(board)
     assert(blockingPiece.castleEastBlack === List())
@@ -229,7 +248,7 @@ class MovesTest extends FunSuite with BeforeAndAfterEach {
       Piece("EE"), Piece("EE"), Piece("EE"), Piece("EE"), Piece("EE"), Piece("EE"), Piece("EE"), Piece("EE"),
       Piece("WP"), Piece("WP"), Piece("WP"), Piece("WP"), Piece("WP"), Piece("WP"), Piece("WP"), Piece("WP"),
       Piece("WR"), Piece("WN"), Piece("EE"), Piece("EE"), Piece("WK"), Piece("EE"), Piece("WN"), Piece("WR")),
-      List(false, false, true, true, true, true))
+      List(false, false, true, true, true, true), -1)
 
     val blockingPiece = Moves(board)
     assert(blockingPiece.castleEastWhite === List())
@@ -261,7 +280,7 @@ class MovesTest extends FunSuite with BeforeAndAfterEach {
       Piece("EE"), Piece("EE"), Piece("EE"), Piece("EE"), Piece("EE"), Piece("EE"), Piece("EE"), Piece("EE"),
       Piece("WP"), Piece("WP"), Piece("WP"), Piece("WP"), Piece("WP"), Piece("WP"), Piece("WP"), Piece("WP"),
       Piece("WR"), Piece("WN"), Piece("WB"), Piece("WQ"), Piece("WK"), Piece("WB"), Piece("WN"), Piece("WR")),
-      List(false, false, true, true, true, true))
+      List(false, false, true, true, true, true), -1)
     
     val blockingPiece = Moves(board)
     assert(blockingPiece.castleWestBlack === List())
