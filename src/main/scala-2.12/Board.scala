@@ -25,8 +25,15 @@ case class Board(position: List[Piece], info: List[Boolean], enPassantCol: Int) 
   def validRow(pos: Int, delta: Int, limit: Int) = math.abs(row(pos) - row(pos + delta)) <= limit
   def validCol(pos: Int, delta: Int, limit: Int) = math.abs(col(pos) - col(pos + delta)) <= limit
   def emptySquare(pos: Int) = position(pos).pieceType == 'E'
-
   def deletePiece(pos: Int) = this.copy(position = position.updated(pos, Piece("EE")))
+
+  def positionAsCols(): List[List[Piece]] = {
+    (for (i <- 0 until 8) yield {
+      (for (j <- 0 until 8) yield {
+        position(j*8 + i)
+      }).toList
+    }).toList
+  }
 
   lazy val prettyPieces = Map("EE" -> " … ", "WK" -> " ♔ ", "WQ" -> " ♕ ", "WR" -> " ♖ ",
     "WB" -> " ♗ ", "WN" -> " ♘ ", "WP" -> " ♙ ",
