@@ -8,7 +8,7 @@ case class Evaluation(board: Board) {
 
   def totalHeuristics(): Double = {
     //material + pawn
-    positionValues + knight + bishop + rook
+    positionValues + knight + bishop + rook + mobility
   }
 
   def material: Double = board.position.foldLeft(0.0)(_ + _.value)
@@ -195,5 +195,16 @@ case class Evaluation(board: Board) {
 
     0.3*increasingWithFewerPawns + 0.3*seventhRank + 0.2*tarraschRule + 0.1*enemyQueenOnSameFile
   }
-  
+
+  def mobility = {
+    val moves = Moves(board)
+    board.position
+      .zipWithIndex
+      .map { case (piece, pos) =>
+        if (piece.color == 'W') moves.movesFromType(pos).size
+        else if (piece.color == 'B') -moves.movesFromType(pos).size
+        else 0
+      }
+      .sum * 0.01
+  }
 }
