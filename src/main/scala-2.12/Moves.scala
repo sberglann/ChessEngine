@@ -29,15 +29,15 @@ case class Moves(board: Board) {
 
   def rookMoves(pos: Int): List[Int] = {
     // TODO: Add test to check if path is blocked for each direction, reducing number of calls to slide()
-    (slide(pos, 0, -8 to -56 by -8, List()) ++ slide(pos, 0, 8 to 56 by 8, List()) ++
-      slide(pos, 0, -1 to -8 by -1, List()) ++ slide(pos, 0, 1 to 8, List()))
+    (slide(pos, 0, -8 to -56 by -8, Nil) ++ slide(pos, 0, 8 to 56 by 8, Nil) ++
+      slide(pos, 0, -1 to -8 by -1, Nil) ++ slide(pos, 0, 1 to 8, Nil))
       .map(delta => pos + delta)
   }
 
   def bishopMoves(pos: Int): List[Int] = {
     // TODO: Add test to check if path is blocked for each direction, reducing number of calls to slide()
-    (slide(pos, 0, -7 to -49 by -7, List()) ++ slide(pos, 0, 7 to 49 by 7, List()) ++
-      slide(pos, 0, -9 to -63 by -9, List()) ++ slide(pos, 0, 9 to 63 by 9, List()))
+    (slide(pos, 0, -7 to -49 by -7, Nil) ++ slide(pos, 0, 7 to 49 by 7, Nil) ++
+      slide(pos, 0, -9 to -63 by -9, Nil) ++ slide(pos, 0, 9 to 63 by 9, Nil))
       .map(delta => pos + delta)
   }
 
@@ -75,7 +75,8 @@ case class Moves(board: Board) {
   }
 
   // Generic method for generating moves for sliding pieces -- queen, bishops and rooks
-  @tailrec final def slide(pos: Int, prevDelta: Int, delta: Range, result: List[Int]): List[Int] = {
+  @tailrec
+  final def slide(pos: Int, prevDelta: Int, delta: Range, result: List[Int]): List[Int] = {
     if (delta.nonEmpty
       && board.validIndex(pos + delta.head)
       && board.validCol(pos + prevDelta, delta.head - prevDelta, 1)
@@ -92,28 +93,28 @@ case class Moves(board: Board) {
     if (board.info(2) && Seq(57, 58, 59).forall(pos => board.emptySquare(pos)) &&
       !Seq(58, 59, 60).exists(pos => fieldAttacked(pos, 'B'))){
       List(board.changedBoard(56, 59).changedBoard(60, 58))
-    } else List()
+    } else Nil
   }
 
   def castleEastWhite = {
     if (board.info(4) && Seq(61, 62).forall(pos => board.emptySquare(pos)) &&
       !Seq(60, 61, 62).exists(pos => fieldAttacked(pos, 'B'))){
         List(board.changedBoard(63, 61).changedBoard(60, 62))
-      } else List()
+      } else Nil
   }
 
   def castleWestBlack = {
     if (board.info(3) && Seq(1, 2, 3).forall(pos => board.emptySquare(pos)) &&
       !Seq(2, 3, 4).exists(pos => fieldAttacked(pos, 'W'))){
       List(board.changedBoard(7, 5).changedBoard(4, 6))
-    } else List()
+    } else Nil
   }
 
   def castleEastBlack = {
     if (board.info(5) && Seq(5, 6).forall(pos => board.emptySquare(pos)) &&
       !Seq(4, 5, 6).exists(pos => fieldAttacked(pos, 'W'))){
       List(board.changedBoard(0, 3).changedBoard(4, 2))
-    } else List()
+    } else Nil
   }
 
   def castleMoves(color: Char): List[Board] = {
@@ -132,14 +133,8 @@ case class Moves(board: Board) {
     case 'B' => bishopMoves(pos)
     case 'N' => knightMoves(pos)
     case 'P' => pawnMoves(pos)
-    case 'E' => List()
+    case 'E' => Nil
   }
-
-  //Checks if a move puts own king in check
-  //def checksOwnKing(pos: Int, newPos: Int): Boolean = {
-  //  val newBoard = board.copy(position = board.position.updated(pos, Piece(Color.NONE, PieceType.EMPTY)).updated(newPos, board.position(pos)))
-  //  check(newBoard.position(newPos).color, newBoard)
-  //}
 
   def covers(pos: Int, coverIndex: Int): Boolean = movesFromType(pos).contains(coverIndex)
 
