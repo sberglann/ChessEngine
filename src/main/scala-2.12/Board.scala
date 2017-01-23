@@ -16,8 +16,8 @@ case class Board(position: List[Piece], info: List[Boolean], enPassantCol: Int) 
     * double-step pawn move, it is simply set to -1.
     */
 
-  lazy val whiteKingPos = position.indexWhere(piece => piece.pieceType == 'K' && piece.color == 'W')
-  lazy val blackKingPos = position.indexWhere(piece => piece.pieceType == 'K' && piece.color == 'B')
+  lazy val whiteKingPos = posFromPiece(Piece("WK")).head
+  lazy val blackKingPos = posFromPiece(Piece("BK")).head
 
   def row(i: Int) = i / 8
   def col(i: Int) = i % 8
@@ -62,10 +62,28 @@ case class Board(position: List[Piece], info: List[Boolean], enPassantCol: Int) 
       else if (pos == 63)           info.updated(4, false)
       else                          info
 
-    this.copy(position = position
-      .updated(pos, Piece("EE"))
-      .updated(newPos, this.position(pos)), info = newInfo, enPassantCol = newEnPassantCol)
+    //Checks if white pawn has moved to 8th rank, or black pawn has moved to 1st rank.
+    //TODO: Add choice between queen, rook, bishop and knight. Currently, queen is automatically chosen as replacement.
+    if ((row(pos) == 1 || row(pos) == 6) && position(pos).pieceType == 'P'){
+      if (position(pos).color == 'W') {
+        this.copy(position = position
+          .updated(pos, Piece("EE"))
+          .updated(newPos, Piece("WQ")))
+      }
+      else {
+        this.copy(position = position
+          .updated(pos, Piece("EE"))
+          .updated(newPos, Piece("BQ")))
+      }
+    }
+    else {
+      this.copy(position = position
+        .updated(pos, Piece("EE"))
+        .updated(newPos, this.position(pos)), info = newInfo, enPassantCol = newEnPassantCol)
+    }
+
   }
+
 
   def generateSuccessor(color: Char) = {
     val moves = Moves(this)
@@ -74,6 +92,13 @@ case class Board(position: List[Piece], info: List[Boolean], enPassantCol: Int) 
       .filter{ case (piece, index) => piece.color == color }
       .flatMap{ case (piece, index) => moves.getMovesAt(index).map(move => changedBoard(index, move))} ++
       moves.castleMoves(color)
+  }
+
+  def posFromPiece(piece: Piece): List[Int] = {
+    position
+      .zipWithIndex
+      .filter{ case (p, index) => p == piece}
+      .map{ case (p, index) => index}
   }
 
 }
