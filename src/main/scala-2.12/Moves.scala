@@ -90,7 +90,7 @@ case class Moves(board: Board) {
 
   //Checks if king can castle to direction. Fields between king and rook must be empty, and cannot be attacked by enemy.
   //The info list contains false if the relevant rook or the king has moved.
-  def castleWestWhite = {
+  def castleWestWhite: List[Board] = {
     if (board.info(2)
       && Seq(57, 58, 59).forall(pos => board.emptySquare(pos))
       && !Seq(58, 59, 60).exists(pos => fieldAttacked(pos, 'B'))
@@ -100,7 +100,7 @@ case class Moves(board: Board) {
     } else Nil
   }
 
-  def castleEastWhite = {
+  def castleEastWhite: List[Board] = {
     if (board.info(4)
       && Seq(61, 62).forall(pos => board.emptySquare(pos))
       && !Seq(60, 61, 62).exists(pos => fieldAttacked(pos, 'B'))
@@ -110,7 +110,7 @@ case class Moves(board: Board) {
     } else Nil
   }
 
-  def castleWestBlack = {
+  def castleWestBlack: List[Board] = {
     if (board.info(3)
       && Seq(1, 2, 3).forall(pos => board.emptySquare(pos))
       && !Seq(2, 3, 4).exists(pos => fieldAttacked(pos, 'W'))
@@ -120,7 +120,7 @@ case class Moves(board: Board) {
     } else Nil
   }
 
-  def castleEastBlack = {
+  def castleEastBlack: List[Board] = {
     if (board.info(5)
       && Seq(5, 6).forall(pos => board.emptySquare(pos))
       && !Seq(4, 5, 6).exists(pos => fieldAttacked(pos, 'W'))
@@ -136,7 +136,8 @@ case class Moves(board: Board) {
   }
 
   def getMovesAt(pos: Int) = {
-    movesFromType(pos).filter(newPos => !check(board.position(pos).color, board.changedBoard(pos, newPos)))
+    movesFromType(pos)
+      .filter(newPos => !check(board.position(pos).color, board.changedBoard(pos, newPos)))
   }
 
   def movesFromType(pos: Int): List[Int] = board.position(pos).pieceType match {
@@ -152,9 +153,11 @@ case class Moves(board: Board) {
   def covers(pos: Int, coverIndex: Int): Boolean = movesFromType(pos).contains(coverIndex)
 
   //Returns true if field is attacked by color
-  def fieldAttacked(coverIndex: Int, color: Char) = board.position
-    .zipWithIndex
-    .filter { case (piece, index) => piece.color == color }
-    .exists { case (piece, index) => covers(index, coverIndex) }
+  def fieldAttacked(coverIndex: Int, color: Char) = {
+    board.position
+      .zipWithIndex
+      .filter { case (piece, index) => piece.color == color }
+      .exists { case (piece, index) => covers(index, coverIndex) }
+  }
 }
 
