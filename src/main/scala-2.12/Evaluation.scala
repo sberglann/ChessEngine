@@ -11,9 +11,9 @@ case class Evaluation(board: Board) {
     positionValues + material + knight + bishop + rook + mobility
   }
 
-  def material: Double = board.position.foldLeft(0.0)(_ + _.value)
+  val material: Double = board.position.foldLeft(0.0)(_ + _.value)
 
-  def positionValues = {
+  val positionValues = {
     val knightValues = Array(
       -.50, -.40, -.30, -.30, -.30, -.30, -.40, -.50,
       -.40, -.20, 0, 0, 0, 0, -.20, -.40,
@@ -98,14 +98,14 @@ case class Evaluation(board: Board) {
 
   }
 
-  def pawn = {
-    def doublePawn = {
+  val pawn = {
+    val doublePawn = {
       val numWhiteDoublePawns = board.positionAsCols().count(li => li.count(piece => piece == Piece("WP")) > 1)
       val numBlackDoublePawns = board.positionAsCols().count(li => li.count(piece => piece == Piece("BP")) > 1)
       numBlackDoublePawns - numWhiteDoublePawns
     }
 
-    def pawnIslands = {
+    val pawnIslands = {
       def numOfIslands(color: Char) = {
         var prevContainsPawn = false
         val cols = board.positionAsCols()
@@ -130,48 +130,48 @@ case class Evaluation(board: Board) {
     0.4 * doublePawn + 0.2 * pawnIslands
   }
 
-  def knight = {
-    def decreasingWithFewerPawns = {
+  val knight = {
+    val decreasingWithFewerPawns = {
       ((numWhitePawns + numBlackPawns) / 16) *
         (board.position.count(piece => piece.prop == "WN") - board.position.count(piece => piece.prop == "BN"))
     }
     0.2 * decreasingWithFewerPawns
   }
 
-  def bishop = {
+  val bishop = {
     val whiteBishopPos = board.posFromPiece(Piece("WB"))
     val blackBishopPos = board.posFromPiece(Piece("BB"))
 
-    def pair = {
+    val pair = {
       val whiteBishopPair = if (board.position.count(piece => piece.prop == "WB") == 2) 0.5 else 0
       val blackBishopPair = if (board.position.count(piece => piece.prop == "BB") == 2) 0.5 else 0
       whiteBishopPair - blackBishopPair
     }
-    def fianchetto = {
+    val fianchetto = {
       val whiteLeft = if (board.position(49) == Piece("WB")) 1 else 0
       val whiteRight = if (board.position(54) == Piece("WB")) 1 else 0
       val blackLeft = if (board.position(9) == Piece("WB")) 1 else 0
       val blackRight = if (board.position(14) == Piece("WB")) 1 else 0
       whiteLeft + whiteRight - blackRight - blackRight
     }
-    def badBishop = ???
+    val badBishop = ???
     pair + 0.2 * fianchetto
   }
 
-  def rook = {
+  val rook = {
     val whiteRooks = board.posFromPiece(Piece("WR"))
     val blackRooks = board.posFromPiece(Piece("BR"))
-    def increasingWithFewerPawns = {
+    val increasingWithFewerPawns = {
       ((16 - numWhitePawns - numBlackPawns) / 16) *
         (board.position.count(piece => piece.prop == "WR") - board.position.count(piece => piece.prop == "BR"))
     }
-    def seventhRank = {
+    val seventhRank = {
       (8 until 16).count(pos => board.position(pos).prop == "WR") -
         (48 until 56).count(pos => board.position(pos).prop == "BR")
     }
 
     // Advantage given to rooks behind passed pawns
-    def tarraschRule = {
+    val tarraschRule = {
       val whitePawns = board.posFromPiece(Piece("WP"))
       val blackPawns = board.posFromPiece(Piece("BP"))
       val whitePawnsRows = whitePawns.map(pos => board.row(pos))
@@ -185,7 +185,7 @@ case class Evaluation(board: Board) {
     }
 
     //Give small bonus for having rook on same file as enemy queen
-    def enemyQueenOnSameFile = {
+    val enemyQueenOnSameFile = {
       val whiteQueenFile = board.posFromPiece(Piece("WQ"))
       val blackQueenFile = board.posFromPiece(Piece("BQ"))
 
@@ -196,7 +196,7 @@ case class Evaluation(board: Board) {
     0.3 * increasingWithFewerPawns + 0.3 * seventhRank + 0.2 * tarraschRule + 0.1 * enemyQueenOnSameFile
   }
 
-  def mobility = {
+  val mobility = {
     val moves = Moves(board)
     board.position
       .zipWithIndex
