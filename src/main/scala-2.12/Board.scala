@@ -2,7 +2,9 @@
 /**
   * Created by Sigurd on 03.01.2017.
   */
-case class Board(position: List[Piece], info: List[Boolean], enPassantCol: Int) {
+case class Board(position: List[Piece],
+                 info: List[Boolean],
+                 enPassantCol: Int) {
   /**
     * info is a list of booleans representing board information.
     * 0: white is checked
