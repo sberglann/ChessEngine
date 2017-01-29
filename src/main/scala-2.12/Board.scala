@@ -21,19 +21,19 @@ case class Board(position: List[Piece],
   lazy val whiteKingPos = posFromPiece(Piece("WK")).head
   lazy val blackKingPos = posFromPiece(Piece("BK")).head
 
-  def row(i: Int) = i / 8
+  def row(i: Int): Int = i / 8
 
-  def col(i: Int) = i % 8
+  def col(i: Int): Int = i % 8
 
-  def validIndex(i: Int) = i >= 0 && i < 64
+  def validIndex(i: Int): Boolean = i >= 0 && i < 64
 
-  def validRow(pos: Int, delta: Int, limit: Int) = math.abs(row(pos) - row(pos + delta)) <= limit
+  def validRow(pos: Int, delta: Int, limit: Int): Boolean = math.abs(row(pos) - row(pos + delta)) <= limit
 
-  def validCol(pos: Int, delta: Int, limit: Int) = math.abs(col(pos) - col(pos + delta)) <= limit
+  def validCol(pos: Int, delta: Int, limit: Int): Boolean = math.abs(col(pos) - col(pos + delta)) <= limit
 
-  def emptySquare(pos: Int) = position(pos).pieceType == 'E'
+  def emptySquare(pos: Int): Boolean = position(pos).pieceType == 'E'
 
-  def deletePiece(pos: Int) = this.copy(position = position.updated(pos, Piece("EE")))
+  def deletePiece(pos: Int): Board = this.copy(position = position.updated(pos, Piece("EE")))
 
   def positionAsCols(): List[List[Piece]] = {
     (for (i <- 0 until 8) yield {
@@ -43,12 +43,12 @@ case class Board(position: List[Piece],
     }).toList
   }
 
-  lazy val prettyPieces = Map("EE" -> " … ", "WK" -> " ♔ ", "WQ" -> " ♕ ", "WR" -> " ♖ ",
+  lazy val prettyPieces: Map[String, String] = Map("EE" -> " … ", "WK" -> " ♔ ", "WQ" -> " ♕ ", "WR" -> " ♖ ",
     "WB" -> " ♗ ", "WN" -> " ♘ ", "WP" -> " ♙ ",
     "BK" -> " ♚ ", "BQ" -> " ♛ ", "BR" -> " ♜ ", "BB" -> " ♝ ",
     "BN" -> " ♞ ", "BP" -> " ♟ ")
 
-  def prettyBoard = {
+  lazy val prettyBoard: String = {
     (for (i <- position.indices) yield {
       if (i % 8 == 0) s"\n ${8 - i / 8} ║${prettyPieces(position(i).color.toString + position(i).pieceType.toString)}"
       else prettyPieces(position(i).color.toString + position(i).pieceType.toString)
@@ -58,7 +58,7 @@ case class Board(position: List[Piece],
   def changedBoard(pos: Int, newPos: Int): Board = {
     //TODO: Add checks to info list, or change list.
 
-    val newEnPassantCol = if (position(pos).pieceType == 'P' && math.abs(row(pos) - row(newPos)) == 2) col(pos) else -1
+    val newEnPassantCol: Int = if (position(pos).pieceType == 'P' && math.abs(row(pos) - row(newPos)) == 2) col(pos) else -1
 
     //Checks if castle or king is moved. If this is the case, castling cannot be done, and the info-list is changed
     val newInfo =
