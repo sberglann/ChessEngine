@@ -5,7 +5,7 @@ import org.scalatest.{BeforeAndAfterEach, FunSuite}
   */
 class MovesTest extends FunSuite with BeforeAndAfterEach {
 
-  
+
   test("Initial moves test") {
     val board = Board(List(
       Piece("BR"), Piece("BN"), Piece("BB"), Piece("BQ"), Piece("BK"), Piece("BB"), Piece("BN"), Piece("BR"),
@@ -89,8 +89,8 @@ class MovesTest extends FunSuite with BeforeAndAfterEach {
 
   test("Pawn moves test") {
     val board = Board(List(
-      Piece("EE"), Piece("EE"), Piece("EE"), Piece("EE"), Piece("EE"), Piece("EE"), Piece("BR"), Piece("EE"),
-      Piece("EE"), Piece("EE"), Piece("EE"), Piece("EE"), Piece("EE"), Piece("EE"), Piece("EE"), Piece("EE"),
+      Piece("BK"), Piece("EE"), Piece("EE"), Piece("EE"), Piece("EE"), Piece("EE"), Piece("BR"), Piece("EE"),
+      Piece("EE"), Piece("EE"), Piece("EE"), Piece("EE"), Piece("EE"), Piece("EE"), Piece("EE"), Piece("WP"),
       Piece("EE"), Piece("EE"), Piece("EE"), Piece("EE"), Piece("EE"), Piece("EE"), Piece("EE"), Piece("EE"),
       Piece("EE"), Piece("EE"), Piece("EE"), Piece("EE"), Piece("EE"), Piece("EE"), Piece("EE"), Piece("EE"),
       Piece("EE"), Piece("EE"), Piece("EE"), Piece("EE"), Piece("EE"), Piece("EE"), Piece("EE"), Piece("EE"),
@@ -102,6 +102,7 @@ class MovesTest extends FunSuite with BeforeAndAfterEach {
     assert(moves.getMovesAt(51).toSet === Set(43, 35, 42, 44))
     assert(moves.getMovesAt(42).toSet === Set(49, 50, 51))
     assert(moves.getMovesAt(54).toSet === Set(46, 38))
+    assert(moves.getMovesAt(15).toSet === Set(6, 7))
   }
 
   test("En passant test") {
@@ -160,7 +161,7 @@ class MovesTest extends FunSuite with BeforeAndAfterEach {
 
   test("Knight moves test") {
     val board = Board(List(
-      Piece("EE"), Piece("EE"), Piece("EE"), Piece("EE"), Piece("EE"), Piece("EE"), Piece("BR"), Piece("EE"),
+      Piece("BK"), Piece("EE"), Piece("EE"), Piece("EE"), Piece("EE"), Piece("EE"), Piece("BR"), Piece("EE"),
       Piece("EE"), Piece("EE"), Piece("EE"), Piece("WK"), Piece("EE"), Piece("EE"), Piece("EE"), Piece("EE"),
       Piece("BR"), Piece("EE"), Piece("WN"), Piece("EE"), Piece("EE"), Piece("EE"), Piece("EE"), Piece("EE"),
       Piece("EE"), Piece("BB"), Piece("EE"), Piece("EE"), Piece("EE"), Piece("EE"), Piece("EE"), Piece("EE"),
@@ -173,7 +174,7 @@ class MovesTest extends FunSuite with BeforeAndAfterEach {
     assert(moves.getMovesAt(18).toSet === Set())
     assert(moves.getMovesAt(33).toSet === Set(48, 50, 43, 27, 16))
   }
-  
+
   test("Castle west white") {
     val board = Board(List(
       Piece("BR"), Piece("BN"), Piece("BB"), Piece("BQ"), Piece("BK"), Piece("BB"), Piece("BN"), Piece("BR"),
@@ -187,23 +188,23 @@ class MovesTest extends FunSuite with BeforeAndAfterEach {
       List(false, false, true, true, true, true), -1)
 
     val blockingPiece = Moves(board)
-    assert(blockingPiece.castleWestWhite === List())
+    assert(blockingPiece.castleWestWhite === Nil)
 
     val clear = blockingPiece.copy(board = board.deletePiece(57))
-    assert(clear.castleWestWhite != List())
+    assert(clear.castleWestWhite != Nil)
 
     val pathChecked = clear.copy(board = clear.board.deletePiece(51).changedBoard(3, 19))
-    assert(pathChecked.castleWestWhite === List())
+    assert(pathChecked.castleWestWhite === Nil)
 
     val kingChecked = clear.copy(board = pathChecked.board.deletePiece(52).changedBoard(19, 20))
-    assert(pathChecked.castleWestWhite === List())
+    assert(pathChecked.castleWestWhite === Nil)
 
     val clear2 = pathChecked.copy(board = pathChecked.board.deletePiece(19))
-    assert(clear2.castleWestWhite != List())
+    assert(clear2.castleWestWhite != Nil)
 
     val board2 = board.copy(position = board.position.updated(57, Piece("EE")), info = List(false, false, false, true, true, true))
     val illegalMoveHistory = Moves(board2)
-    assert(illegalMoveHistory.castleWestWhite === List())
+    assert(illegalMoveHistory.castleWestWhite === Nil)
   }
 
   test("Castle east black") {
@@ -219,23 +220,23 @@ class MovesTest extends FunSuite with BeforeAndAfterEach {
       List(false, false, true, true, true, true), -1)
 
     val blockingPiece = Moves(board)
-    assert(blockingPiece.castleEastBlack === List())
+    assert(blockingPiece.castleEastBlack === Nil)
 
     val clear = blockingPiece.copy(board = board.deletePiece(6))
-    assert(clear.castleEastBlack != List())
+    assert(clear.castleEastBlack != Nil)
 
     val pathChecked = clear.copy(board = clear.board.deletePiece(13).changedBoard(59, 45))
-    assert(pathChecked.castleEastBlack === List())
+    assert(pathChecked.castleEastBlack === Nil)
 
     val kingChecked = clear.copy(board = pathChecked.board.deletePiece(12).changedBoard(45, 44))
-    assert(pathChecked.castleEastBlack === List())
+    assert(pathChecked.castleEastBlack === Nil)
 
     val clear2 = pathChecked.copy(board = pathChecked.board.deletePiece(45))
-    assert(clear2.castleEastBlack != List())
+    assert(clear2.castleEastBlack != Nil)
 
     val board2 = board.copy(position = board.position.updated(6, Piece("EE")), info = List(false, false, true, true, true, false))
     val illegalMoveHistory = Moves(board2)
-    assert(illegalMoveHistory.castleEastBlack === List())
+    assert(illegalMoveHistory.castleEastBlack === Nil)
   }
 
   test("Castle east white") {
@@ -251,23 +252,23 @@ class MovesTest extends FunSuite with BeforeAndAfterEach {
       List(false, false, true, true, true, true), -1)
 
     val blockingPiece = Moves(board)
-    assert(blockingPiece.castleEastWhite === List())
+    assert(blockingPiece.castleEastWhite === Nil)
 
     val clear = blockingPiece.copy(board = board.deletePiece(62))
-    assert(clear.castleEastWhite != List())
+    assert(clear.castleEastWhite != Nil)
 
     val pathChecked = clear.copy(board = clear.board.deletePiece(53).changedBoard(3, 21))
-    assert(pathChecked.castleEastWhite === List())
+    assert(pathChecked.castleEastWhite === Nil)
 
     val kingChecked = clear.copy(board = pathChecked.board.deletePiece(52).changedBoard(21, 20))
-    assert(pathChecked.castleEastWhite === List())
+    assert(pathChecked.castleEastWhite === Nil)
 
     val clear2 = pathChecked.copy(board = pathChecked.board.deletePiece(21))
-    assert(clear2.castleEastWhite != List())
+    assert(clear2.castleEastWhite != Nil)
 
     val board2 = board.copy(position = board.position.updated(62, Piece("EE")), info = List(false, false, true, true, false, true))
     val illegalMoveHistory = Moves(board2)
-    assert(illegalMoveHistory.castleEastWhite === List())
+    assert(illegalMoveHistory.castleEastWhite === Nil)
   }
 
   test("Castle west black") {
@@ -281,24 +282,24 @@ class MovesTest extends FunSuite with BeforeAndAfterEach {
       Piece("WP"), Piece("WP"), Piece("WP"), Piece("WP"), Piece("WP"), Piece("WP"), Piece("WP"), Piece("WP"),
       Piece("WR"), Piece("WN"), Piece("WB"), Piece("WQ"), Piece("WK"), Piece("WB"), Piece("WN"), Piece("WR")),
       List(false, false, true, true, true, true), -1)
-    
+
     val blockingPiece = Moves(board)
-    assert(blockingPiece.castleWestBlack === List())
+    assert(blockingPiece.castleWestBlack === Nil)
 
     val clear = blockingPiece.copy(board = board.deletePiece(1))
-    assert(clear.castleWestBlack != List())
+    assert(clear.castleWestBlack != Nil)
 
     val pathChecked = clear.copy(board = clear.board.deletePiece(11).changedBoard(59, 43))
-    assert(pathChecked.castleWestBlack === List())
+    assert(pathChecked.castleWestBlack === Nil)
 
     val kingChecked = clear.copy(board = pathChecked.board.deletePiece(12).changedBoard(43, 44))
-    assert(pathChecked.castleWestBlack === List())
+    assert(pathChecked.castleWestBlack === Nil)
 
     val clear2 = pathChecked.copy(board = pathChecked.board.deletePiece(43))
-    assert(clear2.castleWestBlack != List())
+    assert(clear2.castleWestBlack != Nil)
 
     val board2 = board.copy(position = board.position.updated(6, Piece("EE")), info = List(false, false, true, false, true, true))
     val illegalMoveHistory = Moves(board2)
-    assert(illegalMoveHistory.castleWestBlack === List())
+    assert(illegalMoveHistory.castleWestBlack === Nil)
   }
 }
