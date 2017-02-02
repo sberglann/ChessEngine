@@ -3,17 +3,34 @@
   */
 case class Evaluation(board: Board) {
 
-  val numWhitePawns = board.position.count(piece => piece.prop == "WP")
-  val numBlackPawns = board.position.count(piece => piece.prop == "BP")
+  lazy val numWhitePawns = board.position.count(piece => piece.prop == "WP")
+  lazy val numBlackPawns = board.position.count(piece => piece.prop == "BP")
 
-  def totalHeuristics: Double = {
+  lazy val totalHeuristics: Double = {
     //material + pawn
-    positionValues + material + knight + bishop + rook + mobility
+    //if (draw) 0 else
+    positionValues + material + pawn + knight + bishop + rook + mobility + checkmate
   }
 
-  val material: Double = board.position.foldLeft(0.0)(_ + _.value)
+  def quickEval(color: Char): Double = if (color == 'W') -material else material
 
-  val positionValues = {
+  lazy val draw = if (board.generateSuccessor('W').isEmpty || board.generateSuccessor('B').isEmpty) true else false
+
+  lazy val material: Double = board.position.foldLeft(.0)(_ + _.value)
+
+  lazy val positionValues = {
+
+    val pawn = Array(
+      1, 1, 1, 1, 1, 1, 1, 1,
+      .50, .50, .50, .50, .50, .50, .50, .50,
+      .10, .10, .20, .30, .30, .20, .10, .10,
+      .05, .05, .10, .25, .25, .10, .05, .05,
+      0, 0, 0, 20, 20, 0, 0, 0,
+      .05, -.05, -.10, 0, 0, -.10, -.05, .05,
+      .05, .10, .10, -.20, -.20, .10, .10, .05,
+      0, 0, 0, 0, 0, 0, 0, 0
+    )
+
     val knightValues = Array(
       -.50, -.40, -.30, -.30, -.30, -.30, -.40, -.50,
       -.40, -.20, 0, 0, 0, 0, -.20, -.40,
@@ -98,7 +115,7 @@ case class Evaluation(board: Board) {
 
   }
 
-  val pawn = {
+  lazy val pawn = {
     val doublePawn = {
       val numWhiteDoublePawns = board.positionAsCols().count(li => li.count(piece => piece == Piece("WP")) > 1)
       val numBlackDoublePawns = board.positionAsCols().count(li => li.count(piece => piece == Piece("BP")) > 1)
@@ -130,7 +147,7 @@ case class Evaluation(board: Board) {
     0.4 * doublePawn + 0.2 * pawnIslands
   }
 
-  val knight = {
+  lazy val knight = {
     val decreasingWithFewerPawns = {
       ((numWhitePawns + numBlackPawns) / 16) *
         (board.position.count(piece => piece.prop == "WN") - board.position.count(piece => piece.prop == "BN"))
@@ -138,7 +155,7 @@ case class Evaluation(board: Board) {
     0.2 * decreasingWithFewerPawns
   }
 
-  val bishop = {
+  lazy val bishop = {
     val whiteBishopPos = board.posFromPiece(Piece("WB"))
     val blackBishopPos = board.posFromPiece(Piece("BB"))
 
@@ -154,11 +171,11 @@ case class Evaluation(board: Board) {
       val blackRight = if (board.position(14) == Piece("WB")) 1 else 0
       whiteLeft + whiteRight - blackRight - blackRight
     }
-    val badBishop = ???
+    //val badBishop = ???
     pair + 0.2 * fianchetto
   }
 
-  val rook = {
+  lazy val rook = {
     val whiteRooks = board.posFromPiece(Piece("WR"))
     val blackRooks = board.posFromPiece(Piece("BR"))
     val increasingWithFewerPawns = {
@@ -196,7 +213,7 @@ case class Evaluation(board: Board) {
     0.3 * increasingWithFewerPawns + 0.3 * seventhRank + 0.2 * tarraschRule + 0.1 * enemyQueenOnSameFile
   }
 
-  val mobility = {
+  lazy val mobility = {
     val moves = Moves(board)
     board.position
       .zipWithIndex
@@ -206,5 +223,11 @@ case class Evaluation(board: Board) {
         else 0
       }
       .sum * 0.01
+  }
+
+  lazy val checkmate = {
+    val whiteKing = if (board.position.contains(Piece("WK"))) 1000 else 0
+    val blackKing = if (board.position.contains(Piece("BK"))) 1000 else 0
+    whiteKing - blackKing
   }
 }
