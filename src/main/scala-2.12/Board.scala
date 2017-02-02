@@ -62,8 +62,8 @@ case class Board(position: List[Piece],
 
     //Checks if castle or king is moved. If this is the case, castling cannot be done, and the info-list is changed
     val newInfo =
-    if (pos == whiteKingPos) info.updated(2, false).updated(4, false)
-    else if (pos == blackKingPos) info.updated(3, false).updated(5, false)
+    if (position(pos) == Piece("WK")) info.updated(2, false).updated(4, false)
+    else if (position(pos) == Piece("BK")) info.updated(3, false).updated(5, false)
     else if (pos == 0) info.updated(3, false)
     else if (pos == 7) info.updated(5, false)
     else if (pos == 56) info.updated(2, false)
@@ -72,7 +72,7 @@ case class Board(position: List[Piece],
 
     //Checks if white pawn has moved to 8th rank, or black pawn has moved to 1st rank.
     //TODO: Add choice between queen, rook, bishop and knight. Currently, queen is automatically chosen as replacement.
-    if ((row(pos) == 1 || row(pos) == 6) && position(pos).pieceType == 'P') {
+    if ((row(pos) == 1 && position(pos).color == 'W' || row(pos) == 6 && position(pos).color == 'B') && position(pos).pieceType == 'P') {
       if (position(pos).color == 'W') {
         this.copy(position = position
           .updated(pos, Piece("EE"))
@@ -89,9 +89,7 @@ case class Board(position: List[Piece],
         .updated(pos, Piece("EE"))
         .updated(newPos, this.position(pos)), info = newInfo, enPassantCol = newEnPassantCol)
     }
-
   }
-
 
   def generateSuccessor(color: Char): List[Board] = {
     val moves = Moves(this)
@@ -108,5 +106,4 @@ case class Board(position: List[Piece],
       .filter { case (p, index) => p == piece }
       .map { case (p, index) => index }
   }
-
 }
