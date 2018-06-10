@@ -3,13 +3,15 @@
   */
 case class Evaluation(board: Board) {
 
-  val numWhitePawns = board.position.count(piece => piece.prop == "WP")
-  val numBlackPawns = board.position.count(piece => piece.prop == "BP")
+  val numWhitePawns = board.position.count(_ == Piece.wp)
+  val numBlackPawns = board.position.count(_ == Piece.bp)
 
   def totalHeuristics(): Double = {
     //material + pawn
     positionValues + knight + bishop + rook + mobility
   }
+
+  def quickEval(color: Char) = if (color == 'W') material else -material
 
   def material: Double = board.position.foldLeft(0.0)(_ + _.value)
 
@@ -80,17 +82,17 @@ case class Evaluation(board: Board) {
 
     board.position.zipWithIndex
       .map { case (piece, index) =>
-        piece.prop match {
-          case "WN" => knightValues(index)
-          case "WB" => bishopValues(index)
-          case "WR" => rookValues(index)
-          case "WK" => kingValuesEarly(index)
-          case "WQ" => queenValues(index)
-          case "BN" => -knightValues.reverse(index)
-          case "BB" => -bishopValues.reverse(index)
-          case "BR" => -rookValues.reverse(index)
-          case "BK" => -kingValuesEarly.reverse(index)
-          case "BQ" => -queenValues.reverse(index)
+        piece match {
+          case Piece.wn => knightValues(index)
+          case Piece.wb => bishopValues(index)
+          case Piece.wr => rookValues(index)
+          case Piece.wk => kingValuesEarly(index)
+          case Piece.wq => queenValues(index)
+          case Piece.bn => -knightValues.reverse(index)
+          case Piece.bb => -bishopValues.reverse(index)
+          case Piece.br => -rookValues.reverse(index)
+          case Piece.bk => -kingValuesEarly.reverse(index)
+          case Piece.bq => -queenValues.reverse(index)
           case _    => 0
         }
       }
@@ -100,8 +102,8 @@ case class Evaluation(board: Board) {
 
   def pawn = {
     def doublePawn = {
-      val numWhiteDoublePawns = board.positionAsCols().count(li => li.count(piece => piece == Piece("WP")) > 1)
-      val numBlackDoublePawns = board.positionAsCols().count(li => li.count(piece => piece == Piece("BP")) > 1)
+      val numWhiteDoublePawns = board.positionAsCols().count(li => li.count(piece => piece == Piece.wp) > 1)
+      val numBlackDoublePawns = board.positionAsCols().count(li => li.count(piece => piece == Piece.bp) > 1)
       numBlackDoublePawns - numWhiteDoublePawns
     }
 
@@ -109,7 +111,7 @@ case class Evaluation(board: Board) {
       def numOfIslands(color: Char) = {
         var prevContainsPawn = false
         val cols = board.positionAsCols()
-        val pawn = if (color == 'W') Piece("WP") else Piece("BP")
+        val pawn = if (color == 'W') Piece.wp else Piece.bp
         (for (i <- 0 until 8) yield {
           if (cols(i).contains(pawn)){
             if (prevContainsPawn) 0
@@ -130,50 +132,51 @@ case class Evaluation(board: Board) {
     0.4*doublePawn + 0.2*pawnIslands
   }
 
-  def knight = {
+  def knight: Double = {
     def decreasingWithFewerPawns = {
       ((numWhitePawns + numBlackPawns)/16)*
-        (board.position.count(piece => piece.prop == "WN") - board.position.count(piece => piece.prop == "BN"))
+        (board.position.count(_ == Piece.wn) - board.position.count(_ == Piece.bn))
     }
     0.2*decreasingWithFewerPawns
   }
 
-  def bishop = {
-    val whiteBishopPos = board.posFromPiece(Piece("WB"))
-    val blackBishopPos = board.posFromPiece(Piece("BB"))
+  def bishop: Double = {
+    val whiteBishopPos = board.posFromPiece(Piece.wb)
+    val blackBishopPos = board.posFromPiece(Piece.bb)
 
     def pair = {
-      val whiteBishopPair = if (board.position.count(piece => piece.prop == "WB") == 2) 0.5 else 0
-      val blackBishopPair = if (board.position.count(piece => piece.prop == "BB") == 2) 0.5 else 0
+
+      val whiteBishopPair = if (board.position.count(_ == Piece.wb) == 2) 0.5 else 0
+      val blackBishopPair = if (board.position.count(_ == Piece.bb) == 2) 0.5 else 0
       whiteBishopPair - blackBishopPair
     }
     def fianchetto = {
-      val whiteLeft   = if (board.position(49) == Piece("WB")) 1 else 0
-      val whiteRight  = if (board.position(54) == Piece("WB")) 1 else 0
-      val blackLeft   = if (board.position(9)  == Piece("WB")) 1 else 0
-      val blackRight  = if (board.position(14) == Piece("WB")) 1 else 0
+      val whiteLeft   = if (board.position(49) == Piece.wb) 1 else 0
+      val whiteRight  = if (board.position(54) == Piece.wb) 1 else 0
+      val blackLeft   = if (board.position(9)  == Piece.wb) 1 else 0
+      val blackRight  = if (board.position(14) == Piece.wb) 1 else 0
       whiteLeft + whiteRight - blackRight - blackRight
     }
     def badBishop = ???
     pair + 0.2*fianchetto
   }
 
-  def rook = {
-    val whiteRooks = board.posFromPiece(Piece("WR"))
-    val blackRooks = board.posFromPiece(Piece("BR"))
+  def rook: Double = {
+    val whiteRooks = board.posFromPiece(Piece.wr)
+    val blackRooks = board.posFromPiece(Piece.br)
     def increasingWithFewerPawns = {
       ((16 - numWhitePawns - numBlackPawns)/16)*
-        (board.position.count(piece => piece.prop == "WR") - board.position.count(piece => piece.prop == "BR"))
+        (board.position.count(_== Piece.wr) - board.position.count(_ == Piece.br))
     }
     def seventhRank = {
-      (8 until 16).count(pos => board.position(pos).prop == "WR") -
-        (48 until 56).count(pos => board.position(pos).prop == "BR")
+      (8 until 16).count(pos => board.position(pos) == Piece.wr) -
+        (48 until 56).count(pos => board.position(pos) == Piece.br)
     }
 
     // Advantage given to rooks behind passed pawns
     def tarraschRule = {
-      val whitePawns = board.posFromPiece(Piece("WP"))
-      val blackPawns = board.posFromPiece(Piece("BP"))
+      val whitePawns = board.posFromPiece(Piece.wp)
+      val blackPawns = board.posFromPiece(Piece.bp)
       val whitePawnsRows = whitePawns.map(pos => board.row(pos))
       val blackPawnsRows = blackPawns.map(pos => board.row(pos))
 
@@ -186,8 +189,8 @@ case class Evaluation(board: Board) {
 
     //Give small bonus for having rook on same file as enemy queen
     def enemyQueenOnSameFile = {
-      val whiteQueenFile = board.posFromPiece(Piece("WQ"))
-      val blackQueenFile = board.posFromPiece(Piece("BQ"))
+      val whiteQueenFile = board.posFromPiece(Piece.wq)
+      val blackQueenFile = board.posFromPiece(Piece.bq)
 
       whiteRooks.intersect(blackQueenFile).size - blackRooks.intersect(whiteQueenFile).size
 

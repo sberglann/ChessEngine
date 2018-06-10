@@ -2,7 +2,6 @@
   * Created by Sigurd on 03.01.2017.
   */
 import scala.annotation.tailrec
-import scala.collection.GenTraversableOnce
 
 case class Moves(board: Board) {
 
@@ -10,12 +9,17 @@ case class Moves(board: Board) {
   def col(i: Int) = i % 8
 
   // Returns true if color is checked
-  def check(color: Char, newBoard: Board) = {
-    val kingPosition = if (color == 'W') newBoard.whiteKingPos else if (color == 'B') newBoard.blackKingPos else -1
+  def check(color: Char, newBoard: Board): Boolean = {
+    val kingPosition = color match {
+      case 'W' => newBoard.whiteKingPos.getOrElse(-1)
+      case 'B' => newBoard.blackKingPos.getOrElse(-1)
+      case _ => -1
+    }
+
     newBoard.position
       .zipWithIndex
-      .filter{case (piece, pos) => piece.color != 'E' && piece.color != color}
-      .exists{case (piece, pos) => Moves(newBoard).covers(pos, kingPosition)}
+      .filter{case (piece, _) => piece.color != 'E' && piece.color != color}
+      .exists{case (_, pos) => Moves(newBoard).covers(pos, kingPosition)}
   }
 
   def kingMoves(pos: Int): List[Int] = {
@@ -88,42 +92,42 @@ case class Moves(board: Board) {
 
   //Checks if king can castle to direction. Fields between king and rook must be empty, and cannot be attacked by enemy.
   //The info list contains false if the relevant rook or the king has moved.
-  def castleWestWhite = {
+  def castleWestWhite: List[Board] = {
     if (board.info(2)
       && Seq(57, 58, 59).forall(pos => board.emptySquare(pos))
       && !Seq(58, 59, 60).exists(pos => fieldAttacked(pos, 'B'))
-      && board.position(60) == Piece("WK")
-      && board.position(56) == Piece("WR")){
+      && board.position(60) == Piece.wk
+      && board.position(56) == Piece.wr){
       List(board.changedBoard(56, 59).changedBoard(60, 58))
     } else Nil
   }
 
-  def castleEastWhite = {
+  def castleEastWhite: List[Board] = {
     if (board.info(4)
       && Seq(61, 62).forall(pos => board.emptySquare(pos))
       && !Seq(60, 61, 62).exists(pos => fieldAttacked(pos, 'B'))
-      && board.position(60) == Piece("WK")
-      && board.position(63) == Piece("WR")){
+      && board.position(60) == Piece.wk
+      && board.position(63) == Piece.wr){
         List(board.changedBoard(63, 61).changedBoard(60, 62))
       } else Nil
   }
 
-  def castleWestBlack = {
+  def castleWestBlack: List[Board] = {
     if (board.info(3)
       && Seq(1, 2, 3).forall(pos => board.emptySquare(pos))
       && !Seq(2, 3, 4).exists(pos => fieldAttacked(pos, 'W'))
-      && board.position(4) == Piece("BK")
-      && board.position(0) == Piece("BR")){
+      && board.position(4) == Piece.bk
+      && board.position(0) == Piece.br){
       List(board.changedBoard(7, 5).changedBoard(4, 6))
     } else Nil
   }
 
-  def castleEastBlack = {
+  def castleEastBlack: List[Board] = {
     if (board.info(5)
       && Seq(5, 6).forall(pos => board.emptySquare(pos))
       && !Seq(4, 5, 6).exists(pos => fieldAttacked(pos, 'W'))
-      && board.position(4) == Piece("BK")
-      && board.position(7) == Piece("BR")){
+      && board.position(4) == Piece.bk
+      && board.position(7) == Piece.br){
       List(board.changedBoard(0, 3).changedBoard(4, 2))
     } else Nil
   }
@@ -133,7 +137,7 @@ case class Moves(board: Board) {
     else castleWestBlack ++ castleEastBlack
   }
 
-  def getMovesAt(pos: Int) = {
+  def getMovesAt(pos: Int): List[Int] = {
     movesFromType(pos).filter(newPos => !check(board.position(pos).color, board.changedBoard(pos, newPos)))
   }
 
@@ -150,9 +154,9 @@ case class Moves(board: Board) {
   def covers(pos: Int, coverIndex: Int): Boolean = movesFromType(pos).contains(coverIndex)
 
   //Returns true if field is attacked by color
-  def fieldAttacked(coverIndex: Int, color: Char) = board.position
+  def fieldAttacked(coverIndex: Int, color: Char): Boolean = board.position
     .zipWithIndex
-    .filter{ case (piece, index) => piece.color == color}
-    .exists{ case (piece, index) => covers(index, coverIndex)}
+    .filter{ case (piece, _) => piece.color == color}
+    .exists{ case (_, index) => covers(index, coverIndex)}
 }
 

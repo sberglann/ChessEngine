@@ -1,3 +1,4 @@
+import Piece.Piece
 
 /**
   * Created by Sigurd on 03.01.2017.
@@ -16,16 +17,16 @@ case class Board(position: List[Piece], info: List[Boolean], enPassantCol: Int) 
     * double-step pawn move, it is simply set to -1.
     */
 
-  lazy val whiteKingPos = posFromPiece(Piece("WK")).head
-  lazy val blackKingPos = posFromPiece(Piece("BK")).head
+  lazy val whiteKingPos: Option[Int] = posFromPiece(Piece.wk).headOption
+  lazy val blackKingPos: Option[Int] = posFromPiece(Piece.bk).headOption
 
-  def row(i: Int) = i / 8
-  def col(i: Int) = i % 8
-  def validIndex(i: Int) = i >= 0 && i < 64
-  def validRow(pos: Int, delta: Int, limit: Int) = math.abs(row(pos) - row(pos + delta)) <= limit
-  def validCol(pos: Int, delta: Int, limit: Int) = math.abs(col(pos) - col(pos + delta)) <= limit
-  def emptySquare(pos: Int) = position(pos).pieceType == 'E'
-  def deletePiece(pos: Int) = this.copy(position = position.updated(pos, Piece("EE")))
+  def row(i: Int): Int = i / 8
+  def col(i: Int): Int = i % 8
+  def validIndex(i: Int): Boolean = i >= 0 && i < 64
+  def validRow(pos: Int, delta: Int, limit: Int): Boolean = math.abs(row(pos) - row(pos + delta)) <= limit
+  def validCol(pos: Int, delta: Int, limit: Int): Boolean = math.abs(col(pos) - col(pos + delta)) <= limit
+  def emptySquare(pos: Int): Boolean = position(pos).pieceType == 'E'
+  def deletePiece(pos: Int): Board = this.copy(position = position.updated(pos, Piece.ee))
 
   def positionAsCols(): List[List[Piece]] = {
     (for (i <- 0 until 8) yield {
@@ -67,18 +68,18 @@ case class Board(position: List[Piece], info: List[Boolean], enPassantCol: Int) 
     if ((row(pos) == 1 || row(pos) == 6) && position(pos).pieceType == 'P'){
       if (position(pos).color == 'W') {
         this.copy(position = position
-          .updated(pos, Piece("EE"))
-          .updated(newPos, Piece("WQ")))
+          .updated(pos, Piece.ee)
+          .updated(newPos, Piece.wq))
       }
       else {
         this.copy(position = position
-          .updated(pos, Piece("EE"))
-          .updated(newPos, Piece("BQ")))
+          .updated(pos, Piece.ee)
+          .updated(newPos, Piece.bq))
       }
     }
     else {
       this.copy(position = position
-        .updated(pos, Piece("EE"))
+        .updated(pos, Piece.ee)
         .updated(newPos, this.position(pos)), info = newInfo, enPassantCol = newEnPassantCol)
     }
 
