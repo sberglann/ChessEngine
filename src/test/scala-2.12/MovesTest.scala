@@ -5,17 +5,17 @@ import org.scalatest.{BeforeAndAfterEach, FunSuite}
   */
 class MovesTest extends FunSuite with BeforeAndAfterEach {
 
-  
+
   test("Initial moves test") {
     val board = Board(List(
-      Piece("BR"), Piece("BN"), Piece("BB"), Piece("BQ"), Piece("BK"), Piece("BB"), Piece("BN"), Piece("BR"),
-      Piece("BP"), Piece("BP"), Piece("BP"), Piece("BP"), Piece("BP"), Piece("BP"), Piece("BP"), Piece("BP"),
-      Piece("EE"), Piece("EE"), Piece("EE"), Piece("EE"), Piece("EE"), Piece("EE"), Piece("EE"), Piece("EE"),
-      Piece("EE"), Piece("EE"), Piece("EE"), Piece("EE"), Piece("EE"), Piece("EE"), Piece("EE"), Piece("EE"),
-      Piece("EE"), Piece("EE"), Piece("EE"), Piece("EE"), Piece("EE"), Piece("EE"), Piece("EE"), Piece("EE"),
-      Piece("EE"), Piece("EE"), Piece("EE"), Piece("EE"), Piece("EE"), Piece("EE"), Piece("EE"), Piece("EE"),
-      Piece("WP"), Piece("WP"), Piece("WP"), Piece("WP"), Piece("WP"), Piece("WP"), Piece("WP"), Piece("WP"),
-      Piece("WR"), Piece("WN"), Piece("WB"), Piece("WQ"), Piece("WK"), Piece("WB"), Piece("WN"), Piece("WR")),
+      Piece.br, Piece.bn, Piece.bb, Piece.bq, Piece.bk, Piece.bb, Piece.bn, Piece.br,
+      Piece.bp, Piece.bp, Piece.bp, Piece.bp, Piece.bp, Piece.bp, Piece.bp, Piece.bp,
+      Piece.ee, Piece.ee, Piece.ee, Piece.ee, Piece.ee, Piece.ee, Piece.ee, Piece.ee,
+      Piece.ee, Piece.ee, Piece.ee, Piece.ee, Piece.ee, Piece.ee, Piece.ee, Piece.ee,
+      Piece.ee, Piece.ee, Piece.ee, Piece.ee, Piece.ee, Piece.ee, Piece.ee, Piece.ee,
+      Piece.ee, Piece.ee, Piece.ee, Piece.ee, Piece.ee, Piece.ee, Piece.ee, Piece.ee,
+      Piece.wp, Piece.wp, Piece.wp, Piece.wp, Piece.wp, Piece.wp, Piece.wp, Piece.wp,
+      Piece.wr, Piece.wn, Piece.wb, Piece.wq, Piece.wk, Piece.wb, Piece.wn, Piece.wr),
       List(false, false, true, true, true, true), -1)
     val moves = Moves(board)
 
@@ -58,15 +58,16 @@ class MovesTest extends FunSuite with BeforeAndAfterEach {
 
   test("Pawns removed initial moves test") {
     val board = Board(List(
-      Piece("BR"), Piece("BN"), Piece("BB"), Piece("BQ"), Piece("BK"), Piece("BB"), Piece("BN"), Piece("BR"),
-      Piece("EE"), Piece("EE"), Piece("EE"), Piece("EE"), Piece("EE"), Piece("EE"), Piece("EE"), Piece("EE"),
-      Piece("EE"), Piece("EE"), Piece("EE"), Piece("EE"), Piece("EE"), Piece("EE"), Piece("EE"), Piece("EE"),
-      Piece("EE"), Piece("EE"), Piece("EE"), Piece("EE"), Piece("EE"), Piece("EE"), Piece("EE"), Piece("EE"),
-      Piece("EE"), Piece("EE"), Piece("EE"), Piece("EE"), Piece("EE"), Piece("EE"), Piece("EE"), Piece("EE"),
-      Piece("EE"), Piece("EE"), Piece("EE"), Piece("EE"), Piece("EE"), Piece("EE"), Piece("EE"), Piece("EE"),
-      Piece("EE"), Piece("EE"), Piece("EE"), Piece("EE"), Piece("EE"), Piece("EE"), Piece("EE"), Piece("EE"),
-      Piece("WR"), Piece("WN"), Piece("WB"), Piece("WQ"), Piece("WK"), Piece("WB"), Piece("WN"), Piece("WR")),
+      Piece.br, Piece.bn, Piece.bb, Piece.bq, Piece.bk, Piece.bb, Piece.bn, Piece.br,
+      Piece.ee, Piece.ee, Piece.ee, Piece.ee, Piece.ee, Piece.ee, Piece.ee, Piece.ee,
+      Piece.ee, Piece.ee, Piece.ee, Piece.ee, Piece.ee, Piece.ee, Piece.ee, Piece.ee,
+      Piece.ee, Piece.ee, Piece.ee, Piece.ee, Piece.ee, Piece.ee, Piece.ee, Piece.ee,
+      Piece.ee, Piece.ee, Piece.ee, Piece.ee, Piece.ee, Piece.ee, Piece.ee, Piece.ee,
+      Piece.ee, Piece.ee, Piece.ee, Piece.ee, Piece.ee, Piece.ee, Piece.ee, Piece.ee,
+      Piece.ee, Piece.ee, Piece.ee, Piece.ee, Piece.ee, Piece.ee, Piece.ee, Piece.ee,
+      Piece.wr, Piece.wn, Piece.wb, Piece.wq, Piece.wk, Piece.wb, Piece.wn, Piece.wr),
       List(false, false, true, true, true, true), -1)
+
     val moves = Moves(board)
     assert(moves.getMovesAt(0).toSet === Set(8, 16, 24, 32, 40, 48, 56))
     assert(moves.getMovesAt(1).toSet === Set(11, 16, 18))
@@ -89,14 +90,14 @@ class MovesTest extends FunSuite with BeforeAndAfterEach {
 
   test("Pawn moves test") {
     val board = Board(List(
-      Piece("EE"), Piece("EE"), Piece("EE"), Piece("EE"), Piece("EE"), Piece("EE"), Piece("BR"), Piece("EE"),
-      Piece("EE"), Piece("EE"), Piece("EE"), Piece("EE"), Piece("EE"), Piece("EE"), Piece("EE"), Piece("EE"),
-      Piece("EE"), Piece("EE"), Piece("EE"), Piece("EE"), Piece("EE"), Piece("EE"), Piece("EE"), Piece("EE"),
-      Piece("EE"), Piece("EE"), Piece("EE"), Piece("EE"), Piece("EE"), Piece("EE"), Piece("EE"), Piece("EE"),
-      Piece("EE"), Piece("EE"), Piece("EE"), Piece("EE"), Piece("EE"), Piece("EE"), Piece("EE"), Piece("EE"),
-      Piece("EE"), Piece("EE"), Piece("BP"), Piece("EE"), Piece("BR"), Piece("EE"), Piece("EE"), Piece("BB"),
-      Piece("EE"), Piece("WQ"), Piece("EE"), Piece("WP"), Piece("BP"), Piece("EE"), Piece("WP"), Piece("EE"),
-      Piece("EE"), Piece("EE"), Piece("EE"), Piece("EE"), Piece("EE"), Piece("EE"), Piece("WK"), Piece("EE")
+      Piece.ee, Piece.ee, Piece.ee, Piece.ee, Piece.ee, Piece.ee, Piece.br, Piece.ee,
+      Piece.ee, Piece.ee, Piece.ee, Piece.ee, Piece.ee, Piece.ee, Piece.ee, Piece.ee,
+      Piece.ee, Piece.ee, Piece.ee, Piece.ee, Piece.ee, Piece.ee, Piece.ee, Piece.ee,
+      Piece.ee, Piece.ee, Piece.ee, Piece.ee, Piece.ee, Piece.ee, Piece.ee, Piece.ee,
+      Piece.ee, Piece.ee, Piece.ee, Piece.ee, Piece.ee, Piece.ee, Piece.ee, Piece.ee,
+      Piece.ee, Piece.ee, Piece.bp, Piece.ee, Piece.br, Piece.ee, Piece.ee, Piece.bb,
+      Piece.ee, Piece.wq, Piece.ee, Piece.wp, Piece.bp, Piece.ee, Piece.wp, Piece.ee,
+      Piece.ee, Piece.ee, Piece.ee, Piece.ee, Piece.ee, Piece.ee, Piece.wk, Piece.ee
     ), List(false, false, false, false), -1)
     val moves = Moves(board)
     assert(moves.getMovesAt(51).toSet === Set(43, 35, 42, 44))
@@ -106,14 +107,14 @@ class MovesTest extends FunSuite with BeforeAndAfterEach {
 
   test("En passant test") {
     val board = Board(List(
-      Piece("BR"), Piece("BN"), Piece("BB"), Piece("BQ"), Piece("BK"), Piece("BB"), Piece("BN"), Piece("BR"),
-      Piece("BP"), Piece("EE"), Piece("BP"), Piece("EE"), Piece("BP"), Piece("BP"), Piece("BP"), Piece("EE"),
-      Piece("EE"), Piece("EE"), Piece("EE"), Piece("EE"), Piece("EE"), Piece("EE"), Piece("EE"), Piece("EE"),
-      Piece("EE"), Piece("EE"), Piece("EE"), Piece("BP"), Piece("WP"), Piece("EE"), Piece("WP"), Piece("BP"),
-      Piece("WP"), Piece("BP"), Piece("EE"), Piece("EE"), Piece("EE"), Piece("EE"), Piece("EE"), Piece("EE"),
-      Piece("EE"), Piece("EE"), Piece("EE"), Piece("EE"), Piece("EE"), Piece("EE"), Piece("EE"), Piece("EE"),
-      Piece("EE"), Piece("WP"), Piece("WP"), Piece("WP"), Piece("WP"), Piece("WP"), Piece("EE"), Piece("WP"),
-      Piece("WR"), Piece("WN"), Piece("WB"), Piece("WQ"), Piece("WK"), Piece("WB"), Piece("WN"), Piece("WR")),
+      Piece.br, Piece.bn, Piece.bb, Piece.bq, Piece.bk, Piece.bb, Piece.bn, Piece.br,
+      Piece.bp, Piece.ee, Piece.bp, Piece.ee, Piece.bp, Piece.bp, Piece.bp, Piece.ee,
+      Piece.ee, Piece.ee, Piece.ee, Piece.ee, Piece.ee, Piece.ee, Piece.ee, Piece.ee,
+      Piece.ee, Piece.ee, Piece.ee, Piece.bp, Piece.wp, Piece.ee, Piece.wp, Piece.bp,
+      Piece.wp, Piece.bp, Piece.ee, Piece.ee, Piece.ee, Piece.ee, Piece.ee, Piece.ee,
+      Piece.ee, Piece.ee, Piece.ee, Piece.ee, Piece.ee, Piece.ee, Piece.ee, Piece.ee,
+      Piece.ee, Piece.wp, Piece.wp, Piece.wp, Piece.wp, Piece.wp, Piece.ee, Piece.wp,
+      Piece.wr, Piece.wn, Piece.wb, Piece.wq, Piece.wk, Piece.wb, Piece.wn, Piece.wr),
       List(false, false, true, true, true, true), 3)
     val moves = Moves(board)
     assert(moves.getMovesAt(28).toSet === Set(19, 20))
@@ -125,14 +126,14 @@ class MovesTest extends FunSuite with BeforeAndAfterEach {
 
   test("Bishop moves test") {
     val board = Board(List(
-      Piece("EE"), Piece("EE"), Piece("EE"), Piece("EE"), Piece("EE"), Piece("EE"), Piece("BR"), Piece("EE"),
-      Piece("BK"), Piece("EE"), Piece("EE"), Piece("EE"), Piece("EE"), Piece("EE"), Piece("EE"), Piece("EE"),
-      Piece("BB"), Piece("EE"), Piece("EE"), Piece("EE"), Piece("EE"), Piece("EE"), Piece("EE"), Piece("EE"),
-      Piece("WR"), Piece("EE"), Piece("EE"), Piece("WB"), Piece("EE"), Piece("EE"), Piece("EE"), Piece("EE"),
-      Piece("EE"), Piece("EE"), Piece("EE"), Piece("EE"), Piece("EE"), Piece("EE"), Piece("EE"), Piece("EE"),
-      Piece("EE"), Piece("EE"), Piece("BP"), Piece("EE"), Piece("BR"), Piece("EE"), Piece("EE"), Piece("BB"),
-      Piece("EE"), Piece("WQ"), Piece("EE"), Piece("WP"), Piece("BP"), Piece("WP"), Piece("WP"), Piece("EE"),
-      Piece("EE"), Piece("EE"), Piece("EE"), Piece("EE"), Piece("WB"), Piece("EE"), Piece("WK"), Piece("EE")
+      Piece.ee, Piece.ee, Piece.ee, Piece.ee, Piece.ee, Piece.ee, Piece.br, Piece.ee,
+      Piece.bk, Piece.ee, Piece.ee, Piece.ee, Piece.ee, Piece.ee, Piece.ee, Piece.ee,
+      Piece.bb, Piece.ee, Piece.ee, Piece.ee, Piece.ee, Piece.ee, Piece.ee, Piece.ee,
+      Piece.wr, Piece.ee, Piece.ee, Piece.wb, Piece.ee, Piece.ee, Piece.ee, Piece.ee,
+      Piece.ee, Piece.ee, Piece.ee, Piece.ee, Piece.ee, Piece.ee, Piece.ee, Piece.ee,
+      Piece.ee, Piece.ee, Piece.bp, Piece.ee, Piece.br, Piece.ee, Piece.ee, Piece.bb,
+      Piece.ee, Piece.wq, Piece.ee, Piece.wp, Piece.bp, Piece.wp, Piece.wp, Piece.ee,
+      Piece.ee, Piece.ee, Piece.ee, Piece.ee, Piece.wb, Piece.ee, Piece.wk, Piece.ee
     ), List(false, false, false, false), -1)
     val moves = Moves(board)
     assert(moves.getMovesAt(47).toSet === Set(54, 38, 29, 20, 11, 2))
@@ -143,14 +144,14 @@ class MovesTest extends FunSuite with BeforeAndAfterEach {
 
   test("Rook moves test") {
     val board = Board(List(
-      Piece("EE"), Piece("EE"), Piece("EE"), Piece("BK"), Piece("EE"), Piece("EE"), Piece("BR"), Piece("EE"),
-      Piece("EE"), Piece("EE"), Piece("EE"), Piece("EE"), Piece("EE"), Piece("EE"), Piece("EE"), Piece("EE"),
-      Piece("EE"), Piece("EE"), Piece("EE"), Piece("EE"), Piece("EE"), Piece("EE"), Piece("EE"), Piece("EE"),
-      Piece("EE"), Piece("EE"), Piece("EE"), Piece("BR"), Piece("EE"), Piece("EE"), Piece("EE"), Piece("EE"),
-      Piece("EE"), Piece("EE"), Piece("EE"), Piece("EE"), Piece("EE"), Piece("EE"), Piece("EE"), Piece("EE"),
-      Piece("EE"), Piece("EE"), Piece("BP"), Piece("WR"), Piece("BR"), Piece("EE"), Piece("EE"), Piece("BB"),
-      Piece("EE"), Piece("WQ"), Piece("EE"), Piece("WP"), Piece("BP"), Piece("EE"), Piece("WP"), Piece("EE"),
-      Piece("EE"), Piece("EE"), Piece("EE"), Piece("EE"), Piece("EE"), Piece("EE"), Piece("WK"), Piece("EE")
+      Piece.ee, Piece.ee, Piece.ee, Piece.bk, Piece.ee, Piece.ee, Piece.br, Piece.ee,
+      Piece.ee, Piece.ee, Piece.ee, Piece.ee, Piece.ee, Piece.ee, Piece.ee, Piece.ee,
+      Piece.ee, Piece.ee, Piece.ee, Piece.ee, Piece.ee, Piece.ee, Piece.ee, Piece.ee,
+      Piece.ee, Piece.ee, Piece.ee, Piece.br, Piece.ee, Piece.ee, Piece.ee, Piece.ee,
+      Piece.ee, Piece.ee, Piece.ee, Piece.ee, Piece.ee, Piece.ee, Piece.ee, Piece.ee,
+      Piece.ee, Piece.ee, Piece.bp, Piece.wr, Piece.br, Piece.ee, Piece.ee, Piece.bb,
+      Piece.ee, Piece.wq, Piece.ee, Piece.wp, Piece.bp, Piece.ee, Piece.wp, Piece.ee,
+      Piece.ee, Piece.ee, Piece.ee, Piece.ee, Piece.ee, Piece.ee, Piece.wk, Piece.ee
     ), List(false, false, false, false), -1)
     val moves = Moves(board)
     assert(moves.getMovesAt(27).toSet === Set(19, 11, 35, 43))
@@ -160,30 +161,30 @@ class MovesTest extends FunSuite with BeforeAndAfterEach {
 
   test("Knight moves test") {
     val board = Board(List(
-      Piece("EE"), Piece("EE"), Piece("EE"), Piece("EE"), Piece("EE"), Piece("EE"), Piece("BR"), Piece("EE"),
-      Piece("EE"), Piece("EE"), Piece("EE"), Piece("WK"), Piece("EE"), Piece("EE"), Piece("EE"), Piece("EE"),
-      Piece("BR"), Piece("EE"), Piece("WN"), Piece("EE"), Piece("EE"), Piece("EE"), Piece("EE"), Piece("EE"),
-      Piece("EE"), Piece("BB"), Piece("EE"), Piece("EE"), Piece("EE"), Piece("EE"), Piece("EE"), Piece("EE"),
-      Piece("EE"), Piece("WN"), Piece("EE"), Piece("EE"), Piece("EE"), Piece("EE"), Piece("EE"), Piece("EE"),
-      Piece("EE"), Piece("EE"), Piece("BP"), Piece("EE"), Piece("BR"), Piece("EE"), Piece("EE"), Piece("BN"),
-      Piece("EE"), Piece("WQ"), Piece("EE"), Piece("WP"), Piece("BP"), Piece("EE"), Piece("WP"), Piece("EE"),
-      Piece("EE"), Piece("EE"), Piece("EE"), Piece("EE"), Piece("EE"), Piece("EE"), Piece("EE"), Piece("EE")
+      Piece.ee, Piece.ee, Piece.ee, Piece.ee, Piece.ee, Piece.ee, Piece.br, Piece.ee,
+      Piece.ee, Piece.ee, Piece.ee, Piece.wk, Piece.ee, Piece.ee, Piece.ee, Piece.ee,
+      Piece.br, Piece.ee, Piece.wn, Piece.ee, Piece.ee, Piece.ee, Piece.ee, Piece.ee,
+      Piece.ee, Piece.bb, Piece.ee, Piece.ee, Piece.ee, Piece.ee, Piece.ee, Piece.ee,
+      Piece.ee, Piece.wn, Piece.ee, Piece.ee, Piece.ee, Piece.ee, Piece.ee, Piece.ee,
+      Piece.ee, Piece.ee, Piece.bp, Piece.ee, Piece.br, Piece.ee, Piece.ee, Piece.bn,
+      Piece.ee, Piece.wq, Piece.ee, Piece.wp, Piece.bp, Piece.ee, Piece.wp, Piece.ee,
+      Piece.ee, Piece.ee, Piece.ee, Piece.ee, Piece.ee, Piece.ee, Piece.ee, Piece.ee
     ), List(false, false, false, false), -1)
     val moves = Moves(board)
     assert(moves.getMovesAt(18).toSet === Set())
     assert(moves.getMovesAt(33).toSet === Set(48, 50, 43, 27, 16))
   }
-  
+
   test("Castle west white") {
     val board = Board(List(
-      Piece("BR"), Piece("BN"), Piece("BB"), Piece("BQ"), Piece("BK"), Piece("BB"), Piece("BN"), Piece("BR"),
-      Piece("BP"), Piece("BP"), Piece("BP"), Piece("BP"), Piece("BP"), Piece("BP"), Piece("BP"), Piece("BP"),
-      Piece("EE"), Piece("EE"), Piece("EE"), Piece("EE"), Piece("EE"), Piece("EE"), Piece("EE"), Piece("EE"),
-      Piece("EE"), Piece("EE"), Piece("EE"), Piece("EE"), Piece("EE"), Piece("EE"), Piece("EE"), Piece("EE"),
-      Piece("EE"), Piece("EE"), Piece("EE"), Piece("EE"), Piece("EE"), Piece("EE"), Piece("EE"), Piece("EE"),
-      Piece("EE"), Piece("EE"), Piece("EE"), Piece("EE"), Piece("EE"), Piece("EE"), Piece("EE"), Piece("EE"),
-      Piece("WP"), Piece("WP"), Piece("WP"), Piece("WP"), Piece("WP"), Piece("WP"), Piece("WP"), Piece("WP"),
-      Piece("WR"), Piece("WN"), Piece("EE"), Piece("EE"), Piece("WK"), Piece("WB"), Piece("WN"), Piece("WR")),
+      Piece.br, Piece.bn, Piece.bb, Piece.bq, Piece.bk, Piece.bb, Piece.bn, Piece.br,
+      Piece.bp, Piece.bp, Piece.bp, Piece.bp, Piece.bp, Piece.bp, Piece.bp, Piece.bp,
+      Piece.ee, Piece.ee, Piece.ee, Piece.ee, Piece.ee, Piece.ee, Piece.ee, Piece.ee,
+      Piece.ee, Piece.ee, Piece.ee, Piece.ee, Piece.ee, Piece.ee, Piece.ee, Piece.ee,
+      Piece.ee, Piece.ee, Piece.ee, Piece.ee, Piece.ee, Piece.ee, Piece.ee, Piece.ee,
+      Piece.ee, Piece.ee, Piece.ee, Piece.ee, Piece.ee, Piece.ee, Piece.ee, Piece.ee,
+      Piece.wp, Piece.wp, Piece.wp, Piece.wp, Piece.wp, Piece.wp, Piece.wp, Piece.wp,
+      Piece.wr, Piece.wn, Piece.ee, Piece.ee, Piece.wk, Piece.wb, Piece.wn, Piece.wr),
       List(false, false, true, true, true, true), -1)
 
     val blockingPiece = Moves(board)
@@ -201,21 +202,21 @@ class MovesTest extends FunSuite with BeforeAndAfterEach {
     val clear2 = pathChecked.copy(board = pathChecked.board.deletePiece(19))
     assert(clear2.castleWestWhite != List())
 
-    val board2 = board.copy(position = board.position.updated(57, Piece("EE")), info = List(false, false, false, true, true, true))
+    val board2 = board.copy(position = board.position.updated(57, Piece.ee), info = List(false, false, false, true, true, true))
     val illegalMoveHistory = Moves(board2)
     assert(illegalMoveHistory.castleWestWhite === List())
   }
 
   test("Castle east black") {
     val board = Board(List(
-      Piece("BR"), Piece("BN"), Piece("BB"), Piece("BQ"), Piece("BK"), Piece("EE"), Piece("BN"), Piece("BR"),
-      Piece("BP"), Piece("BP"), Piece("BP"), Piece("BP"), Piece("BP"), Piece("BP"), Piece("BP"), Piece("BP"),
-      Piece("EE"), Piece("EE"), Piece("EE"), Piece("EE"), Piece("EE"), Piece("EE"), Piece("EE"), Piece("EE"),
-      Piece("EE"), Piece("EE"), Piece("EE"), Piece("EE"), Piece("EE"), Piece("EE"), Piece("EE"), Piece("EE"),
-      Piece("EE"), Piece("EE"), Piece("EE"), Piece("EE"), Piece("EE"), Piece("EE"), Piece("EE"), Piece("EE"),
-      Piece("EE"), Piece("EE"), Piece("EE"), Piece("EE"), Piece("EE"), Piece("EE"), Piece("EE"), Piece("EE"),
-      Piece("WP"), Piece("WP"), Piece("WP"), Piece("WP"), Piece("WP"), Piece("WP"), Piece("WP"), Piece("WP"),
-      Piece("WR"), Piece("WN"), Piece("WB"), Piece("WQ"), Piece("WK"), Piece("WB"), Piece("WN"), Piece("WR")),
+      Piece.br, Piece.bn, Piece.bb, Piece.bq, Piece.bk, Piece.ee, Piece.bn, Piece.br,
+      Piece.bp, Piece.bp, Piece.bp, Piece.bp, Piece.bp, Piece.bp, Piece.bp, Piece.bp,
+      Piece.ee, Piece.ee, Piece.ee, Piece.ee, Piece.ee, Piece.ee, Piece.ee, Piece.ee,
+      Piece.ee, Piece.ee, Piece.ee, Piece.ee, Piece.ee, Piece.ee, Piece.ee, Piece.ee,
+      Piece.ee, Piece.ee, Piece.ee, Piece.ee, Piece.ee, Piece.ee, Piece.ee, Piece.ee,
+      Piece.ee, Piece.ee, Piece.ee, Piece.ee, Piece.ee, Piece.ee, Piece.ee, Piece.ee,
+      Piece.wp, Piece.wp, Piece.wp, Piece.wp, Piece.wp, Piece.wp, Piece.wp, Piece.wp,
+      Piece.wr, Piece.wn, Piece.wb, Piece.wq, Piece.wk, Piece.wb, Piece.wn, Piece.wr),
       List(false, false, true, true, true, true), -1)
 
     val blockingPiece = Moves(board)
@@ -233,21 +234,21 @@ class MovesTest extends FunSuite with BeforeAndAfterEach {
     val clear2 = pathChecked.copy(board = pathChecked.board.deletePiece(45))
     assert(clear2.castleEastBlack != List())
 
-    val board2 = board.copy(position = board.position.updated(6, Piece("EE")), info = List(false, false, true, true, true, false))
+    val board2 = board.copy(position = board.position.updated(6, Piece.ee), info = List(false, false, true, true, true, false))
     val illegalMoveHistory = Moves(board2)
     assert(illegalMoveHistory.castleEastBlack === List())
   }
 
   test("Castle east white") {
     val board = Board(List(
-      Piece("BR"), Piece("BN"), Piece("BB"), Piece("BQ"), Piece("BK"), Piece("BB"), Piece("BN"), Piece("BR"),
-      Piece("BP"), Piece("BP"), Piece("BP"), Piece("BP"), Piece("BP"), Piece("BP"), Piece("BP"), Piece("BP"),
-      Piece("EE"), Piece("EE"), Piece("EE"), Piece("EE"), Piece("EE"), Piece("EE"), Piece("EE"), Piece("EE"),
-      Piece("EE"), Piece("EE"), Piece("EE"), Piece("EE"), Piece("EE"), Piece("EE"), Piece("EE"), Piece("EE"),
-      Piece("EE"), Piece("EE"), Piece("EE"), Piece("EE"), Piece("EE"), Piece("EE"), Piece("EE"), Piece("EE"),
-      Piece("EE"), Piece("EE"), Piece("EE"), Piece("EE"), Piece("EE"), Piece("EE"), Piece("EE"), Piece("EE"),
-      Piece("WP"), Piece("WP"), Piece("WP"), Piece("WP"), Piece("WP"), Piece("WP"), Piece("WP"), Piece("WP"),
-      Piece("WR"), Piece("WN"), Piece("EE"), Piece("EE"), Piece("WK"), Piece("EE"), Piece("WN"), Piece("WR")),
+      Piece.br, Piece.bn, Piece.bb, Piece.bq, Piece.bk, Piece.bb, Piece.bn, Piece.br,
+      Piece.bp, Piece.bp, Piece.bp, Piece.bp, Piece.bp, Piece.bp, Piece.bp, Piece.bp,
+      Piece.ee, Piece.ee, Piece.ee, Piece.ee, Piece.ee, Piece.ee, Piece.ee, Piece.ee,
+      Piece.ee, Piece.ee, Piece.ee, Piece.ee, Piece.ee, Piece.ee, Piece.ee, Piece.ee,
+      Piece.ee, Piece.ee, Piece.ee, Piece.ee, Piece.ee, Piece.ee, Piece.ee, Piece.ee,
+      Piece.ee, Piece.ee, Piece.ee, Piece.ee, Piece.ee, Piece.ee, Piece.ee, Piece.ee,
+      Piece.wp, Piece.wp, Piece.wp, Piece.wp, Piece.wp, Piece.wp, Piece.wp, Piece.wp,
+      Piece.wr, Piece.wn, Piece.ee, Piece.ee, Piece.wk, Piece.ee, Piece.wn, Piece.wr),
       List(false, false, true, true, true, true), -1)
 
     val blockingPiece = Moves(board)
@@ -265,21 +266,21 @@ class MovesTest extends FunSuite with BeforeAndAfterEach {
     val clear2 = pathChecked.copy(board = pathChecked.board.deletePiece(21))
     assert(clear2.castleEastWhite != List())
 
-    val board2 = board.copy(position = board.position.updated(62, Piece("EE")), info = List(false, false, true, true, false, true))
+    val board2 = board.copy(position = board.position.updated(62, Piece.ee), info = List(false, false, true, true, false, true))
     val illegalMoveHistory = Moves(board2)
     assert(illegalMoveHistory.castleEastWhite === List())
   }
 
   test("Castle west black") {
     val board = Board(List(
-      Piece("BR"), Piece("BN"), Piece("EE"), Piece("EE"), Piece("BK"), Piece("BB"), Piece("BN"), Piece("BR"),
-      Piece("BP"), Piece("BP"), Piece("BP"), Piece("BP"), Piece("BP"), Piece("BP"), Piece("BP"), Piece("BP"),
-      Piece("EE"), Piece("EE"), Piece("EE"), Piece("EE"), Piece("EE"), Piece("EE"), Piece("EE"), Piece("EE"),
-      Piece("EE"), Piece("EE"), Piece("EE"), Piece("EE"), Piece("EE"), Piece("EE"), Piece("EE"), Piece("EE"),
-      Piece("EE"), Piece("EE"), Piece("EE"), Piece("EE"), Piece("EE"), Piece("EE"), Piece("EE"), Piece("EE"),
-      Piece("EE"), Piece("EE"), Piece("EE"), Piece("EE"), Piece("EE"), Piece("EE"), Piece("EE"), Piece("EE"),
-      Piece("WP"), Piece("WP"), Piece("WP"), Piece("WP"), Piece("WP"), Piece("WP"), Piece("WP"), Piece("WP"),
-      Piece("WR"), Piece("WN"), Piece("WB"), Piece("WQ"), Piece("WK"), Piece("WB"), Piece("WN"), Piece("WR")),
+      Piece.br, Piece.bn, Piece.ee, Piece.ee, Piece.bk, Piece.bb, Piece.bn, Piece.br,
+      Piece.bp, Piece.bp, Piece.bp, Piece.bp, Piece.bp, Piece.bp, Piece.bp, Piece.bp,
+      Piece.ee, Piece.ee, Piece.ee, Piece.ee, Piece.ee, Piece.ee, Piece.ee, Piece.ee,
+      Piece.ee, Piece.ee, Piece.ee, Piece.ee, Piece.ee, Piece.ee, Piece.ee, Piece.ee,
+      Piece.ee, Piece.ee, Piece.ee, Piece.ee, Piece.ee, Piece.ee, Piece.ee, Piece.ee,
+      Piece.ee, Piece.ee, Piece.ee, Piece.ee, Piece.ee, Piece.ee, Piece.ee, Piece.ee,
+      Piece.wp, Piece.wp, Piece.wp, Piece.wp, Piece.wp, Piece.wp, Piece.wp, Piece.wp,
+      Piece.wr, Piece.wn, Piece.wb, Piece.wq, Piece.wk, Piece.wb, Piece.wn, Piece.wr),
       List(false, false, true, true, true, true), -1)
     
     val blockingPiece = Moves(board)
@@ -297,7 +298,7 @@ class MovesTest extends FunSuite with BeforeAndAfterEach {
     val clear2 = pathChecked.copy(board = pathChecked.board.deletePiece(43))
     assert(clear2.castleWestBlack != List())
 
-    val board2 = board.copy(position = board.position.updated(6, Piece("EE")), info = List(false, false, true, false, true, true))
+    val board2 = board.copy(position = board.position.updated(6, Piece.ee), info = List(false, false, true, false, true, true))
     val illegalMoveHistory = Moves(board2)
     assert(illegalMoveHistory.castleWestBlack === List())
   }
