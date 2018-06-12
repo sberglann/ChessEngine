@@ -2,7 +2,7 @@
 /**
   * Created by Sigurd on 03.01.2017.
   */
-class Game {
+object Game {
 
   val board = Board(List(
     Piece.br, Piece.bn, Piece.bb, Piece.bq, Piece.bk, Piece.bb, Piece.bn, Piece.br,
@@ -12,8 +12,8 @@ class Game {
     Piece.ee, Piece.ee, Piece.ee, Piece.ee, Piece.ee, Piece.ee, Piece.ee, Piece.ee,
     Piece.ee, Piece.ee, Piece.ee, Piece.ee, Piece.wp, Piece.ee, Piece.ee, Piece.ee,
     Piece.wp, Piece.wp, Piece.wp, Piece.ee, Piece.wp, Piece.wp, Piece.wp, Piece.wp,
-    Piece.wr, Piece.wn, Piece.wb, Piece.wq, Piece.wk, Piece.wb, Piece.wn, Piece.wr),
-    List(false, false, true, true, true, true), -1)
+    Piece.wr, Piece.wn, Piece.wb, Piece.wq, Piece.wk, Piece.wb, Piece.wn, Piece.wr
+  ), List(false, false, true, true, true, true), -1)
 
   val board3 = Board(List(
     Piece.br, Piece.bn, Piece.bb, Piece.ee, Piece.ee, Piece.br, Piece.bk, Piece.ee,
@@ -23,8 +23,8 @@ class Game {
     Piece.ee, Piece.ee, Piece.ee, Piece.wp, Piece.ee, Piece.ee, Piece.ee, Piece.ee,
     Piece.wn, Piece.ee, Piece.ee, Piece.ee, Piece.wp, Piece.wn, Piece.ee, Piece.ee,
     Piece.wp, Piece.wp, Piece.wp, Piece.ee, Piece.wk, Piece.wp, Piece.wp, Piece.wp,
-    Piece.ee, Piece.br, Piece.wb, Piece.wq, Piece.ee, Piece.wb, Piece.wr, Piece.ee),
-    List(false, false, true, true, true, true), -1)
+    Piece.ee, Piece.br, Piece.wb, Piece.wq, Piece.ee, Piece.wb, Piece.wr, Piece.ee
+  ), List(false, false, true, true, true, true), -1)
 
   val board2 = Board(List(
     Piece.bk, Piece.ee, Piece.ee, Piece.ee, Piece.ee, Piece.ee, Piece.ee, Piece.ee,
@@ -34,19 +34,24 @@ class Game {
     Piece.ee, Piece.ee, Piece.ee, Piece.ee, Piece.ee, Piece.ee, Piece.ee, Piece.ee,
     Piece.ee, Piece.ee, Piece.ee, Piece.ee, Piece.ee, Piece.ee, Piece.ee, Piece.ee,
     Piece.ee, Piece.ee, Piece.ee, Piece.ee, Piece.ee, Piece.ee, Piece.ee, Piece.ee,
-    Piece.ee, Piece.ee, Piece.ee, Piece.ee, Piece.ee, Piece.ee, Piece.ee, Piece.ee),
-    List(false, false, false, false, false, false), -1)
+    Piece.ee, Piece.ee, Piece.ee, Piece.ee, Piece.ee, Piece.ee, Piece.ee, Piece.ee
+  ), List(false, false, false, false, false, false), -1)
 }
 
 object Hei extends App {
-  val g = new Game()
-  println(g.board3.prettyBoard)
+
+  val gui = GUI
+  gui.updateBoard(Game.board)
+
+  println(Game.board3.prettyBoard)
+
+
 
   //val succ = g.board3.generateSuccessor('W').sortBy(board => Evaluation(board).totalHeuristics)
   //succ.foreach(b => println(b.prettyBoard))
 
   val now = System.currentTimeMillis
-  val s1 = Search('W', g.board3)
+  val s1 = Search('W', Game.board3)
   println(s1.runSearch._2.prettyBoard)
 
   val s2 = Search('B', s1.runSearch._2)

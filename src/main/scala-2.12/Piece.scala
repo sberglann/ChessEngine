@@ -8,9 +8,9 @@ object Piece extends Enumeration {
   type Piece = Value
 
   //Color represented as 'W', 'B' or 'E' (empty), piece types represented as 'K', 'Q', 'R', 'B', 'N', 'P' or 'E' (empty)
-  case class Val(color: Char, pieceType: Char, value: Double) extends super.Val
-
-  implicit  def valueExtractorVal(x: Value): Val = x.asInstanceOf[Val]
+  case class Val(color: Char, pieceType: Char, value: Double) extends super.Val {
+    override def toString(): String = s"$color$pieceType"
+  }
 
   val wk = Val('W', 'K', 100)
   val wq = Val('W', 'Q', 9.75)

@@ -5,8 +5,8 @@ import scala.annotation.tailrec
 
 case class Moves(board: Board) {
 
-  def row(i: Int) = i / 8
-  def col(i: Int) = i % 8
+  def row(i: Int): Int = i / 8
+  def col(i: Int): Int = i % 8
 
   // Returns true if color is checked
   def check(color: Char, newBoard: Board): Boolean = {
