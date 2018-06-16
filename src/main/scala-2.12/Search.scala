@@ -1,11 +1,8 @@
 import scala.annotation.tailrec
 
-/**
-  * Created by Sigurd on 24.01.2017.
-  */
 case class Search(maxColor: Char, initialBoard: Board) {
 
-  val maxDepth = 2
+  val maxDepth = 5
   val minColor = if (maxColor == 'W') 'B' else 'W'
 
   def runSearch: (Double, Board) = {

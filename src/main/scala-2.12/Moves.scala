@@ -1,6 +1,3 @@
-/**
-  * Created by Sigurd on 03.01.2017.
-  */
 import scala.annotation.tailrec
 
 case class Moves(board: Board) {

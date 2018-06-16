@@ -1,8 +1,5 @@
 import org.scalatest.{BeforeAndAfterEach, FunSuite}
 
-/**
-  * Created by Sigurd on 03.01.2017.
-  */
 class MovesTest extends FunSuite with BeforeAndAfterEach {
 
 

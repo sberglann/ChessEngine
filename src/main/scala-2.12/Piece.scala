@@ -1,12 +1,7 @@
-
-
-/**
-  * Created by Sigurd on 03.01.2017.
-  */
 object Piece extends Enumeration {
 
   type Piece = Value
-
+  implicit def toVal(x: Value): Val = x.asInstanceOf[Val]
   //Color represented as 'W', 'B' or 'E' (empty), piece types represented as 'K', 'Q', 'R', 'B', 'N', 'P' or 'E' (empty)
   case class Val(color: Char, pieceType: Char, value: Double) extends super.Val {
     override def toString(): String = s"$color$pieceType"

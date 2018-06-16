@@ -1,6 +1,3 @@
-/**
-  * Created by Sigurd on 13.01.2017.
-  */
 case class Evaluation(board: Board) {
 
   val numWhitePawns = board.position.count(_ == Piece.wp)

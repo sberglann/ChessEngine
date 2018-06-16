@@ -1,8 +1,5 @@
 import Piece.Piece
 
-/**
-  * Created by Sigurd on 03.01.2017.
-  */
 case class Board(position: List[Piece], info: List[Boolean], enPassantCol: Int) {
   /**
     * info is a list of booleans representing board information.
@@ -101,5 +98,17 @@ case class Board(position: List[Piece], info: List[Boolean], enPassantCol: Int) 
       .filter{ case (p, index) => p == piece}
       .map{ case (p, index) => index}
   }
+}
 
+object Board {
+  val defaultBoard =  Board(List(
+    Piece.br, Piece.bn, Piece.bb, Piece.bq, Piece.bk, Piece.bb, Piece.bn, Piece.br,
+    Piece.bp, Piece.bp, Piece.bp, Piece.bp, Piece.bp, Piece.bp, Piece.bp, Piece.bp,
+    Piece.ee, Piece.ee, Piece.ee, Piece.ee, Piece.ee, Piece.ee, Piece.ee, Piece.ee,
+    Piece.ee, Piece.ee, Piece.ee, Piece.ee, Piece.ee, Piece.ee, Piece.ee, Piece.ee,
+    Piece.ee, Piece.ee, Piece.ee, Piece.ee, Piece.ee, Piece.ee, Piece.ee, Piece.ee,
+    Piece.ee, Piece.ee, Piece.ee, Piece.ee, Piece.ee, Piece.ee, Piece.ee, Piece.ee,
+    Piece.wp, Piece.wp, Piece.wp, Piece.wp, Piece.wp, Piece.wp, Piece.wp, Piece.wp,
+    Piece.wr, Piece.wn, Piece.wb, Piece.wq, Piece.wk, Piece.wb, Piece.wn, Piece.wr
+  ), List(false, false, true, true, true, true), -1)
 }
